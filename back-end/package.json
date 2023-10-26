@@ -1,0 +1,25 @@
+{
+  "name": "back-end",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "ts-node-dev src/server.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/juliacteixeira/SyncFlow.git"
+  },
+  "author": "Julia Teixeira, Gabriel Nathan",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/juliacteixeira/SyncFlow/issues"
+  },
+  "homepage": "https://github.com/juliacteixeira/SyncFlow#readme",
+  "devDependencies": {
+    "@types/node": "^20.8.9",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.2.2"
+  }
+}
