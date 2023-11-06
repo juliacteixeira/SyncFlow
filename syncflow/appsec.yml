@@ -1,0 +1,18 @@
+version: 1.0
+os: linux
+files:
+  - source: /
+    destination: /home/ubuntu/app
+hooks:
+  BeforeInstall:
+    - location: deploy/before_install.sh
+      timeout: 300
+      runas: root
+  AfterInstall:
+    - location: deploy/after_install.sh
+      timeout: 600
+      runas: root
+  ApplicationStart:
+    - location: deploy/application_start.sh
+      timeout: 300
+      runas: root
