@@ -11,7 +11,7 @@ export class UserDAO {
       return result.rows;
     }
     catch (error) {
-      throw error; 
+      throw new Error('Error interno server' + error);
     }
   }
 
@@ -22,7 +22,7 @@ export class UserDAO {
       return result.rows;
     }
     catch (error) {
-      throw error; 
+      throw new Error('Error interno server' + error);
     }
   }
 
@@ -62,7 +62,7 @@ export class UserDAO {
         return result.rows;  
     }
     catch (error) {
-        throw error;
+      throw new Error('Error interno server' + error);
     }
   }
 
@@ -77,11 +77,11 @@ export class UserDAO {
         return await this.listAllUser();
       }
       else{
-        return {mensagem:'User not found'};
+        throw new Error('User not fould');
       }
     }
     catch(error){
-      throw error;
+      throw new Error('Error interno server' + error);
     }
   }
   private async findUserId(user_id:number){
@@ -98,7 +98,29 @@ export class UserDAO {
       }
     }
     catch(error){
+      throw new Error('Error interno server' + error);
+    }
+  }
+  public async update(user:User){
+    try {
+      const sql = 'UPDATE users SET name = $1, email = $2, password = $3, type = $4 WHERE user_id = $5';
+      
+      if(user.user_id === undefined){
+        throw new Error('user_id is required');
+      }
 
+      if(await this.findUserId(user.user_id)){
+        const values = [user.name, user.email, user.password, user.type, user.user_id];
+        const result = await DataBase.query(sql, values);
+        return await this.listAllUser();
+      }
+      else{
+        throw new Error('User not fould');
+      }
+      
+    }
+    catch (error) {
+      throw new Error('Error interno server' + error);
     }
   }
 }
