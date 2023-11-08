@@ -91,21 +91,21 @@ export class ProjectDAO{
       }
 
     public async update(project: Project){
-    try {
-        const sql = 'UPDATE project SET name_project = $1, description = $2, date_create = $3, date_last_update = $4 WHERE project_id = $5';
+        try {
+            const sql = 'UPDATE project SET name_project = $1, description = $2, date_create = $3, date_last_update = $4 WHERE project_id = $5';
+            
+            if(project.project_id === undefined){
+                throw new Error('project_id is required');
+            }
         
-        if(project.project_id === undefined){
-            throw new Error('project_id is required');
-        }
-    
-        if(await this.findProjectID(project.project_id)){
-            const values = [project.name_project, project.description, project.date_create, project.date_last_update, project.project_id];
-            const result = await DataBase.query(sql, values);
-            return await this.listAllProject();
-        }
-        else{
-            throw new Error('Project not fould');
-        }
+            if(await this.findProjectID(project.project_id)){
+                const values = [project.name_project, project.description, project.date_create, project.date_last_update, project.project_id];
+                const result = await DataBase.query(sql, values);
+                return await this.listAllProject();
+            }
+            else{
+                throw new Error('Project not fould');
+            }
         }
         catch (error) {
             throw new Error('Error interno server' + error);
