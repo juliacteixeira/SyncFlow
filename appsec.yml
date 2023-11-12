@@ -1,0 +1,15 @@
+version: 0.0
+os: linux
+files:
+  - source: /
+    destination: /home/ec2-user/node-express-cicd
+    overwrite: true
+hooks:
+  AfterInstall:
+    - location: scripts/after_install.sh
+      timeout: 900
+      runas: root
+  ApplicationStart:
+    - location: scripts/application_start.sh
+      timeout: 900
+      runas: root
