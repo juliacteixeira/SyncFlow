@@ -1,18 +1,26 @@
-version: 1.0
+version: 0.0
 os: linux
 files:
-  - source: /
-    destination: /home/ubuntu/app
+  - source: /aws
+    destination: /usr/local/codedeployresources
 hooks:
+  ApplicationStop:
+    - location: deploy/application-stop.sh
+      timeout: 300
+      runas: root
   BeforeInstall:
-    - location: deploy/before_install.sh
+    - location: deploy/before-install.sh
       timeout: 300
       runas: root
   AfterInstall:
-    - location: deploy/after_install.sh
-      timeout: 600
+    - location: deploy/after-install.sh
+      timeout: 300
       runas: root
   ApplicationStart:
-    - location: deploy/application_start.sh
+    - location: deploy/application-start.sh
+      timeout: 300
+      runas: root
+  ValidateService:
+    - location: deploy/validate-service.sh
       timeout: 300
       runas: root
