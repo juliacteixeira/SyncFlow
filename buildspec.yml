@@ -3,10 +3,6 @@ version: 0.2
 phases:
   build:
     commands:
-      - curl -sL https://rpm.nodesource.com/setup_16.x | bash -
-      - yum install -y nodejs
-      - node -v
-      - npm -v
       - npm install -g @angular/cli
       - cd frontend
       - npm install
