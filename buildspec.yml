@@ -3,6 +3,7 @@ version: 0.2
 phases:
   build:
     commands:
+      - npm install -g @angular/cli
       - cd frontend
       - npm install
       - ng build --prod
