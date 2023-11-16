@@ -6,7 +6,7 @@ phases:
       - curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
       - export NVM_DIR="$HOME/.nvm"
       - source "$NVM_DIR/nvm.sh"  # Carrega o NVM
-      - nvm install 18.13
+      - nvm install 18.13 || true  # Adiciona "|| true" para ignorar o erro se a versão já estiver instalada
       - nvm use 18.13
       - npm install -g @angular/cli
       - cd frontend
