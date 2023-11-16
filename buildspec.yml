@@ -3,15 +3,12 @@ version: 0.2
 phases:
   build:
     commands:
-      - node -v
-      - npm -v
-      - rm /usr/local/bin/n || true
-      - npm list -g n || npm install -g n
+      - n 14.20.0
       - node -v
       - npm -v
       - npm install -g @angular/cli
       - cd frontend
       - npm install
-      - npm run build
+      - ng build --prod
       - cd ../backend
       - npm install
