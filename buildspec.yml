@@ -6,8 +6,13 @@ phases:
       - curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
       - export NVM_DIR="$HOME/.nvm"
       - source "$NVM_DIR/nvm.sh"  # Carrega o NVM
-      - nvm install 18.13 || true  # Adiciona "|| true" para ignorar o erro se a versão já estiver instalada
-      - nvm use 18.13
+      - command -v nvm  # Verifica se o nvm está disponível
+      - rm -rf "$NVM_DIR"  # Remove o diretório nvm
+      - curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash  # Instala o nvm novamente
+      - export NVM_DIR="$HOME/.nvm"
+      - source "$NVM_DIR/nvm.sh"  # Carrega o NVM novamente
+      - nvm install 18.13
+      - node -v  # Exibe a versão do Node.js para fins de depuração
       - npm install -g @angular/cli
       - cd frontend
       - npm install
