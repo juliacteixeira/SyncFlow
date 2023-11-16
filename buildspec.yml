@@ -5,6 +5,9 @@ phases:
     commands:
       - node -v
       - npm -v
+      - npm install -g n
+      - node -v
+      - npm -v
       - npm install -g @angular/cli
       - cd frontend
       - npm install
