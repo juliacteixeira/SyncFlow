@@ -3,6 +3,8 @@ version: 0.2
 phases:
   build:
     commands:
+      - nvm install 18.13
+      - nvm use 18.13
       - npm install -g @angular/cli
       - cd frontend
       - npm install
