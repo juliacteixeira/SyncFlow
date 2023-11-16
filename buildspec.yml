@@ -5,6 +5,8 @@ phases:
     commands:
       - node -v
       - npm -v
+      - npm list -g n || npm install -g n
+      - rm /usr/local/bin/n || true
       - npm install -g n
       - node -v
       - npm -v
