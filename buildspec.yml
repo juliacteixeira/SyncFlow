@@ -12,6 +12,6 @@ phases:
       - npm install -g @angular/cli
       - cd frontend
       - npm install
-      - ng build --prod
+      - npm run build
       - cd ../backend
       - npm install
