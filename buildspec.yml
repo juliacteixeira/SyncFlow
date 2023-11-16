@@ -3,7 +3,7 @@ version: 0.2
 phases:
   build:
     commands:
-      - n 18.30.0
+      - n 20.9.0
       - node -v
       - npm -v
       - npm install -g @angular/cli
