@@ -8,11 +8,12 @@ phases:
       - curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
       - export NVM_DIR="$HOME/.nvm"
       - source "$NVM_DIR/nvm.sh"  # Carrega o nvm
-  build:
-    commands:
+      - nvm install 12  # Instala a versão 12 do Node.js
       - node -v
       - npm -v
-      - npm install -g @angular/cli
+      - npm install -g @angular/cli@11.2.14  # Instala uma versão compatível com o Node.js 12.x
+  build:
+    commands:
       - cd frontend
       - npm install
       - ng build --prod
