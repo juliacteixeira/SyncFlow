@@ -9,8 +9,6 @@ phases:
       - export NVM_DIR="$HOME/.nvm"
       - source "$NVM_DIR/nvm.sh"  # Carrega o nvm
       - nvm install 12  # Instala a versão 12 do Node.js
-      - nvm use 12  # Usa a versão 12 do Node.js
-      - node -v
       - npm -v
       - npm install -g @angular/cli@11.2.14  # Instala uma versão compatível com o Node.js 12.x
   build:
