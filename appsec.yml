@@ -2,14 +2,11 @@ version: 0.0
 os: linux
 files:
   - source: /
-    destination: /home/ec2-user/node-express-cicd
-    overwrite: true
+    destination: /home/ec2-user/SyncFlow
 hooks:
+  BeforeInstall:
+    - location: scripts/before_install.sh
+      runas: ec2-user
   AfterInstall:
     - location: scripts/after_install.sh
-      timeout: 900
-      runas: root
-  ApplicationStart:
-    - location: scripts/application_start.sh
-      timeout: 900
-      runas: root
+      runas: ec2-user
