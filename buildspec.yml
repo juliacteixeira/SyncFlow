@@ -1,13 +1,15 @@
 version: 0.2
 
 phases:
-  build:
+  install:
+    runtime-versions:
+      nodejs: 20.9.0
     commands:
       - curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
       - export NVM_DIR="$HOME/.nvm"
-      - '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"'
-      - nvm install 20.9.0
-      - nvm use 20.9.0
+      - source "$NVM_DIR/nvm.sh"  # Carrega o nvm
+  build:
+    commands:
       - node -v
       - npm -v
       - npm install -g @angular/cli
