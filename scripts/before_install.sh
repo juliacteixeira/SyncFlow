@@ -1,7 +1,4 @@
 #!/bin/bash
 
-cd /home/ubuntu
-
-# Criamos a pasta para copiar a nossa aplicação
-
-sudo mkdir -p app
+# Navegue até o diretório da aplicação
+cd /home/ec2-user/SyncFlow
