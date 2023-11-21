@@ -3,7 +3,6 @@
   "cli": {
     "analytics": false
   },
-  "defaultProject": "material-dashboard-angular",
   "newProjectRoot": "projects",
   "projects": {
     "material-dashboard-angular": {
