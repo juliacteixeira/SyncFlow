@@ -3,16 +3,13 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule, Routes } from '@angular/router';
 
+import { AuthenticationComponent } from './core/authentication/authentication.component';
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 
 const routes: Routes = [
+
   {
-    path: '/dashboard',
-    redirectTo: 'dashboard',
-    pathMatch: 'full',
-  },
-  {
-    path: '/dashboard',
+    path: 'dashboard',
     component: AdminLayoutComponent,
     children: [{
       path: '',
@@ -20,8 +17,13 @@ const routes: Routes = [
     }]
   },
 
-  { path: 'auth', loadChildren: () => import('./core/authentication/authentication.module').then(m => m.AuthenticationModule) },
-  { path: '**', redirectTo: 'auth/login' }
+  {
+    path: 'auth', component: AuthenticationComponent, children: [{
+      path: '',
+      loadChildren: () => import('./core/authentication/authentication.module').then(m => m.AuthenticationModule)
+    }]
+  },
+
 
 ];
 
@@ -29,9 +31,7 @@ const routes: Routes = [
   imports: [
     CommonModule,
     BrowserModule,
-    RouterModule.forRoot(routes, {
-      useHash: true
-    })
+    RouterModule.forRoot(routes)
   ],
   exports: [
   ],

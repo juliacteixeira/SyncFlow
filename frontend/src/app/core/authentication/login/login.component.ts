@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { RegisterComponent } from '../register/register.component';
 
 @Component({
   selector: 'app-login',
@@ -8,18 +10,43 @@ import { Router } from '@angular/router';
 })
 export class LoginComponent {
 
-  username: string = '';
-  password: string = '';
+  loginForm: FormGroup;
 
-  constructor(private router: Router) { }
+  constructor(private formBuilder: FormBuilder, private router: Router, private route: ActivatedRoute) {
+    this.route.component = RegisterComponent
+
+  }
+
+  ngOnInit(): void {
+    this.initializeForm();
+  }
+
+  initializeForm(): void {
+    this.loginForm = this.formBuilder.group({
+      username: ['', [Validators.required]],
+      password: ['', [Validators.required]],
+    });
+  }
 
   login(): void {
-    // Lógica de autenticação (exemplo: verificar credenciais)
-    // Se as credenciais são válidas, redirecione para a página principal
-    if (this.username === 'usuario' && this.password === 'senha') {
-      this.router.navigate(['/dashboard']);
-    } else {
-      alert('Credenciais inválidas. Tente novamente.');
+    if (this.loginForm.valid) {
+      // Lógica de autenticação (exemplo: verificar credenciais)
+      // Se as credenciais são válidas, redirecione para a página principal
+      const username = this.loginForm.get('username').value;
+      const password = this.loginForm.get('password').value;
+
+      // Implemente sua lógica de autenticação aqui
+      if (username === 'usuario' && password === 'senha') {
+        this.router.navigate(['/projects']);
+      } else {
+        alert('Credenciais inválidas. Tente novamente.');
+      }
     }
+  }
+
+  goToRegister(): void {
+    console.log('entrou aqui');
+
+    this.router.navigate(['/cadastro']);
   }
 }
