@@ -5,10 +5,14 @@ export class ProjectDAO{
 
     public async create(project:Project){
         try {
-            const sql = 'INSERT INTO project (name_project, description, date_create, date_last_update) VALUES ($1, $2, $3, $4) RETURNING *'
-            const values = [project.name_project, project.description, project.date_create, project.date_last_update];
-            const result = await DataBase.query(sql, values);
-            return result.rows;
+            const sql = 'INSERT INTO project (name_project, description, date_create, date_last_update, user_id) VALUES ($1, $2, $3, $4, $5) RETURNING *'
+            
+            if(await this.findUserId(project.user_id)){
+                
+                const values = [project.name_project, project.description, project.date_create, project.date_last_update, project.user_id];
+                const result = await DataBase.query(sql, values);
+                return result.rows;
+            }
         
         }
         catch (error) {
@@ -20,10 +24,10 @@ export class ProjectDAO{
             const sql = 'DELETE FROM project WHERE project_id = $1';
             
             if(await this.findProjectID(project_id)){
-              const values = [project_id];
+                const values = [project_id];
       
-              const result = await DataBase.query(sql, values);
-             
+                const result = await DataBase.query(sql, values);
+                return result;
             }
             else{
               throw new Error('Project not fould');
@@ -50,7 +54,23 @@ export class ProjectDAO{
             throw new Error('Error interno server' + error);
         }
     }
-
+    private async findUserId(user_id:number){
+        try{
+          const sql = 'SELECT * FROM users WHERE user_id = $1';
+          const values = [user_id];
+          const result = await DataBase.query(sql, values);
+    
+          if(result.rows.length > 0){
+            return true;
+          }
+          else{
+            return false;
+          }
+        }
+        catch(error){
+          throw new Error('Error interno server' + error);
+        }
+      }
     public async listAllProject(){
         try {
           const sql = 'SELECT * FROM project'
@@ -98,10 +118,10 @@ export class ProjectDAO{
                 throw new Error('project_id is required');
             }
         
-            if(await this.findProjectID(project.project_id)){
+            if(await this.findProjectID(project.project_id) && await this.findUserId(project.user_id)){
                 const values = [project.name_project, project.description, project.date_create, project.date_last_update, project.project_id];
                 const result = await DataBase.query(sql, values);
-                return await this.listAllProject();
+                return result;
             }
             else{
                 throw new Error('Project not fould');

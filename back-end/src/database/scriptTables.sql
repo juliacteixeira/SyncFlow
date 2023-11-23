@@ -11,7 +11,8 @@ create table project(
 	name_project varchar(150) not null,
 	description text,
 	date_create date not null,
-	date_last_update date not null
+	date_last_update date not null,
+	user_id int references users(user_id)
 );
 
 create table tasks(

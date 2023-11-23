@@ -11,13 +11,13 @@ export class  ProjectController{
 
     public async createProject(req: Request, res: Response) {
         try {
-          const { name_project, description } = req.body;
+          const { name_project, description, user_id } = req.body;
           const date = new Date();
           const date_create = date.toISOString();
           const date_last_update = date.toISOString();
     
-          const newProject: Project = { name_project, description, date_create, date_last_update };
-          await this.checkCampusCreate({ name_project, description, date_create, date_last_update });
+          const newProject: Project = { name_project, description, date_create, date_last_update, user_id };
+          await this.checkCampusCreate({ name_project, description, date_create, date_last_update, user_id });
         
           const result = await this.projectDAO.create(newProject);
 
@@ -86,7 +86,7 @@ export class  ProjectController{
     }
     public async updateProject(req: Request, res: Response) {
       try {
-        const { project_id, name_project, description,date_create } = req.body;
+        const { project_id, name_project, description,date_create, user_id } = req.body;
 
         const currentDate = new Date().toISOString().split('T')[0];
 
@@ -96,9 +96,10 @@ export class  ProjectController{
           date_create,
           description,
           date_last_update: currentDate,
+          user_id
         };
   
-        await this.checkCampusUpdate({ project_id,name_project, description,date_create, date_last_update: currentDate });
+        await this.checkCampusUpdate({ project_id,name_project, description,date_create, date_last_update: currentDate, user_id });
   
         const result = await this.projectDAO.update(projectUpdate);
   
