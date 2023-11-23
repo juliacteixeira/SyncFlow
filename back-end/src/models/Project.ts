@@ -4,4 +4,5 @@ export interface Project{
     description?: string;
     date_create: string;
     date_last_update: string;
+    user_id: number;
 }
