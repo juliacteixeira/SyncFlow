@@ -15,7 +15,7 @@ export class UserDAO {
       return  result.rows;
     }
     catch (error) {
-      throw new Error('Error interno server' + error);
+      throw new Error('email already registered');
     }
   }
 
