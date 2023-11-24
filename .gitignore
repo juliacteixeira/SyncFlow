@@ -43,5 +43,5 @@ testem.log
 Thumbs.db
 
 #Backend
-/backend/node_modules
-/backend/.env
+/back-end/node_modules
+/back-end/.env

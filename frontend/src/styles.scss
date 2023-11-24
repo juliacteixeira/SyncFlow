@@ -1,0 +1,25 @@
+/* You can add global styles to this file, and also import other style files */
+@import '~bootstrap/dist/css/bootstrap.min.css';
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800&display=swap');
+
+@import "./styles/variables/variables";
+@import "./styles/variables/theme-variables";
+
+// Theme Layouts style (Required file)
+@import "./styles/layouts/sidebar";
+@import "./layouts/header";
+@use "./styles/layouts/layouts";
+
+// Component style (Required file)
+
+@import "./styles/component/reboot";
+@import "./styles/component/card";
+
+// Utilities style (Required file)
+@import "./styles/utilities/icon-size";
+@import "./styles/utilities/background";
+
+
+// Pages style (Required file)
+@import "./pages/dashboard1";
+
