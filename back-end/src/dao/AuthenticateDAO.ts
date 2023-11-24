@@ -21,9 +21,11 @@ export class AuthenticateDAO {
         const user: AuthenticateUser | undefined = await this.findByEmail(email);
        
         if (user && (await this.comparePassword(password, user.password))) {
-            return jwt.sign({ userId: user.user_id, username: user.email }, Auth.jwt.secret, {
+            const token =  jwt.sign({ userId: user.user_id, username: user.email }, Auth.jwt.secret, {
                 expiresIn: Auth.jwt.expired,
             });
+            
+            return token;
         }
         return undefined;
     }
