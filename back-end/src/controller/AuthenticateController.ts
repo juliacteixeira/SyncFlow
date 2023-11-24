@@ -11,7 +11,8 @@ export class AuthenticateController{
 
             const token = await AuthenticateDAO.comparePasswords(email, password);
             if(token){
-                return res.status(200).json({token});
+                res.header('Authorization', token);
+                return res.status(200).json(token);
             }
             else{
                 res.status(400).json({message: "Credenciais inválidas"});
