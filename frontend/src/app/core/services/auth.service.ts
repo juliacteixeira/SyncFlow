@@ -1,17 +1,26 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
+import { ILoginResponse } from 'src/shared/models/auth.model';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   private isAuthenticated = false;
+  apiUrl = 'http://localhost:3001'
 
-  login(username: string, password: string): Observable<boolean> {
+  constructor(private http: HttpClient) { }
+
+  login(email: string, password: string): Observable<ILoginResponse> {
+    console.log(email);
+
+    const url = `${this.apiUrl}/login`
+    const credentials = { email, password };
     // Implemente a lógica real de autenticação aqui
     // Aqui, apenas definimos isAuthenticated como true para simular um login bem-sucedido
-    this.isAuthenticated = true;
-    return of(true);
+    return this.http.post<any>(url, credentials);
   }
 
   logout(): void {
@@ -21,6 +30,13 @@ export class AuthService {
   }
 
   isAuthenticatedUser(): boolean {
-    return this.isAuthenticated;
+    return localStorage.getItem('tokenSF') ? true : false;
+  }
+
+  register(name: string, email: string, password: string): Observable<boolean> {
+    const url = `${this.apiUrl}/user`;
+    const type = 'common_user'
+    const user = { name, email, password, type }
+    return this.http.post<boolean>(url, user)
   }
 }

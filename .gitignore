@@ -10,6 +10,7 @@
 # Node
 /frontend/node_modules
 /frontend/npm-debug.log
+/frontend/package-lock.json
 yarn-error.log
 
 # IDEs and editors
@@ -44,4 +45,5 @@ Thumbs.db
 
 #Backend
 /back-end/node_modules
+/back-end/package-lock.json
 /back-end/.env

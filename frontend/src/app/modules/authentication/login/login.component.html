@@ -7,11 +7,14 @@
         </a>
         <form [formGroup]="loginForm" (ngSubmit)="login()">
           <div class="mb-3">
-            <label for="username" class="form-label">Email: </label>
-            <input type="email" class="form-control" formControlName="username">
-            <div *ngIf="loginForm?.get('username')?.hasError('required') && loginForm?.get('username')?.touched"
+            <label for="email" class="form-label">Email: </label>
+            <input type="email" class="form-control" formControlName="email">
+            <div *ngIf="loginForm?.get('email')?.hasError('required') && loginForm?.get('email')?.touched"
               class="text-danger">
-              Nome de usuário é obrigatório.
+              Email é obrigatório.
+            </div>
+            <div class='text-danger' *ngIf="loginForm?.get('email')?.hasError('email')">
+              Email é inválido
             </div>
           </div>
           <div class="mb-4">
@@ -22,9 +25,11 @@
               Senha é obrigatória.
             </div>
           </div>
+          <a (click)='login()' class="btn btn-primary w-100 py-8 fs-4 mb-4 rounded-2">Entrar</a>
+
           <div class="d-flex align-items-center justify-content-center">
             <p class="fs-4 mb-0 fw-bold">Novo aqui?</p>
-            <a class="text-primary fw-bold ms-2">Criar nova conta</a>
+            <a class="text-primary fw-bold ms-2" routerLink="/auth/register">Criar nova conta</a>
           </div>
         </form>
       </div>
