@@ -1,0 +1,38 @@
+<div class="row justify-content-center w-100">
+  <div class="col-md-12">
+    <div class="card mb-0">
+      <div class="card-body">
+        <a href="./index.html" class="text-nowrap logo-img text-center d-block py-3 w-100">
+          <img src="../../../../assets/logo.png" width="180" alt="">
+        </a>
+        <form [formGroup]="loginForm" (ngSubmit)="login()">
+          <div class="mb-3">
+            <label for="email" class="form-label">Email: </label>
+            <input type="email" class="form-control" formControlName="email">
+            <div *ngIf="loginForm?.get('email')?.hasError('required') && loginForm?.get('email')?.touched"
+              class="text-danger">
+              Email é obrigatório.
+            </div>
+            <div class='text-danger' *ngIf="loginForm?.get('email')?.hasError('email')">
+              Email é inválido
+            </div>
+          </div>
+          <div class="mb-4">
+            <label for="exampleInputPassword1" class="form-label">Senha</label>
+            <input type="password" class="form-control" formControlName="password">
+            <div *ngIf="loginForm?.get('password')?.hasError('required') && loginForm?.get('password')?.touched"
+              class="text-danger">
+              Senha é obrigatória.
+            </div>
+          </div>
+          <a (click)='login()' class="btn btn-primary w-100 py-8 fs-4 mb-4 rounded-2">Entrar</a>
+
+          <div class="d-flex align-items-center justify-content-center">
+            <p class="fs-4 mb-0 fw-bold">Novo aqui?</p>
+            <a class="text-primary fw-bold ms-2" routerLink="/auth/register">Criar nova conta</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
