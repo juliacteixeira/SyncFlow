@@ -10,6 +10,7 @@ export class AuthenticateController{
             const {email, password} = req.body;
 
             const token = await AuthenticateDAO.comparePasswords(email, password);
+            
             if(token){
                 res.header('Authorization', token);
                 return res.status(200).json(token);
@@ -17,10 +18,10 @@ export class AuthenticateController{
             else{
                 res.status(400).json({message: "Credenciais inválidas"});
             }    
-        } catch (error) {
+        }
+        catch (error) {
             return res.status(400).json({ message: "Internal error " + error });
         }
         
-    }
-    
+    }    
 }

@@ -1,4 +1,5 @@
 import DataBase from "../config/DataBase";
+import { InternalServerError } from "../config/helpers/Api-error";
 import { Task } from "../models/Task";
 
 export class TaskDAO{
@@ -17,7 +18,7 @@ export class TaskDAO{
             }
         }
         catch (error) {
-            throw new Error('Error interno server' + error);
+            throw new InternalServerError('Internal Server Error' + error);
         }
     }
 
@@ -54,7 +55,7 @@ export class TaskDAO{
             return result.rows;  
         }
         catch (error) {
-          throw new Error('Error interno server' + error);
+            throw new InternalServerError('Internal Server Error' + error);
         }
     }
 
@@ -65,7 +66,7 @@ export class TaskDAO{
             return result.rows;
           }
           catch (error) {
-            throw new Error('Error interno server' + error);
+            throw new InternalServerError('Internal Server Error' + error);
           }
     }
 
@@ -82,8 +83,8 @@ export class TaskDAO{
                 return false;
             }
         }
-        catch(error){
-            throw new Error('Error interno server' + error);
+        catch (error) {
+            throw new InternalServerError('Internal Server Error' + error);
         }
     }
 
@@ -100,8 +101,8 @@ export class TaskDAO{
                 return false;
             }
         }
-        catch(error){
-            throw new Error('Error interno server' + error);
+        catch (error) {
+            throw new InternalServerError('Internal Server Error' + error);
         }
 
     }
@@ -119,8 +120,8 @@ export class TaskDAO{
               throw new Error('Project not fould');
             }
         }
-        catch(error){
-            throw new Error('Error interno server' + error);
+        catch (error) {
+            throw new InternalServerError('Internal Server Error' + error);
         }
     }
     public async update(task:Task){
@@ -141,7 +142,7 @@ export class TaskDAO{
             }
         }
         catch (error) {
-            throw new Error('Error interno server' + error);
+            throw new InternalServerError('Internal Server Error' + error);
         }
     }
 }

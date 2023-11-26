@@ -1,5 +1,6 @@
 import { Project } from "../models/Project";
 import DataBase from '../config/DataBase';
+import { InternalServerError } from "../config/helpers/Api-error";
 
 export class ProjectDAO{
 
@@ -16,8 +17,8 @@ export class ProjectDAO{
         
         }
         catch (error) {
-            throw new Error('Error interno server' + error);
-        }
+            throw new InternalServerError('Internal Server Error' + error);
+          }
     }
     public async delete(project_id:number){
         try{
@@ -33,9 +34,9 @@ export class ProjectDAO{
               throw new Error('Project not fould');
             }
         }
-        catch(error){
-            throw new Error('Error interno server' + error);
-        }
+        catch (error) {
+            throw new InternalServerError('Internal Server Error' + error);
+          }
     }
     private async findProjectID(project_id:number){
         try{
@@ -50,9 +51,9 @@ export class ProjectDAO{
                 return false;
             }
         }
-        catch(error){
-            throw new Error('Error interno server' + error);
-        }
+        catch (error) {
+            throw new InternalServerError('Internal Server Error' + error);
+          }
     }
     private async findUserId(user_id:number){
         try{
@@ -67,9 +68,9 @@ export class ProjectDAO{
             return false;
           }
         }
-        catch(error){
-          throw new Error('Error interno server' + error);
-        }
+        catch (error) {
+            throw new InternalServerError('Internal Server Error' + error);
+          }
       }
     public async listAllProject(){
         try {
@@ -78,8 +79,8 @@ export class ProjectDAO{
           return result.rows;
         }
         catch (error) {
-          throw new Error('Error interno server' + error);
-        }
+            throw new InternalServerError('Internal Server Error' + error);
+          }
     }
 
     public async listProject(params: any){
@@ -106,7 +107,7 @@ export class ProjectDAO{
             return result.rows;  
         }
         catch (error) {
-          throw new Error('Error interno server' + error);
+            throw new InternalServerError('Internal Server Error' + error);
         }
       }
 
@@ -128,7 +129,7 @@ export class ProjectDAO{
             }
         }
         catch (error) {
-            throw new Error('Error interno server' + error);
-        }
+            throw new InternalServerError('Internal Server Error' + error);
+          }
     }
 }

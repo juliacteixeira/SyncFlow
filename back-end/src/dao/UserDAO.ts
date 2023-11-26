@@ -1,5 +1,5 @@
-import { error } from 'console';
 import DataBase from '../config/DataBase';
+import { InternalServerError } from '../config/helpers/Api-error';
 import { User } from '../models/User';
 import  bcrypt from 'bcrypt';
 
@@ -15,7 +15,7 @@ export class UserDAO {
       return  result.rows;
     }
     catch (error) {
-      throw new Error('email already registered');
+      throw new InternalServerError('Internal Server Error' + error);
     }
   }
 
@@ -78,7 +78,7 @@ export class UserDAO {
         const values = [user_id];
 
         const result = await DataBase.query(sql, values);
-        return await this.listAllUser();
+        return result.rows;
       }
       else{
         throw new Error('User not fould');
@@ -127,5 +127,12 @@ export class UserDAO {
     catch (error) {
       throw new Error('Error interno server' + error);
     }
+  }
+  public async findEmail(email:string){
+    const sql = 'SELECT * FROM users WHERE email = $1';
+    const values = [email];
+    const result = await DataBase.query(sql, values);
+
+    return result.rowCount;
   }
 }

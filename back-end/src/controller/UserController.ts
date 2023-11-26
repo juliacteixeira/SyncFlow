@@ -2,6 +2,7 @@
 import { Request, Response, query } from 'express';
 import { User } from '../models/User';
 import { UserDAO } from '../dao/UserDAO';
+import { BadRequestError, CampusError } from '../config/helpers/Api-error';
 
 export class UserController {
   private userDAO: UserDAO;
@@ -12,10 +13,10 @@ export class UserController {
 
   private async checkCampusCreate(user: User) {
     if (typeof user.name !== 'string' || typeof user.email !== 'string' || user.name.length > 150 || user.email.length > 150) {
-        throw new Error('Error, campus is not valid');
+        throw new CampusError('Error, campus is not valid');
     }
-    if (user.type !== 'admin' && user.type !== 'common_user') {
-        throw new Error('Error, campus is not valid: type admin/common_user');
+    if (user.type !== 'common_user') {
+        throw new CampusError('Error, campus is not valid: type common_user');
     }
   }
 
@@ -24,6 +25,11 @@ export class UserController {
     try {
       const { name, email, password, type } = req.body;
       await this.checkCampusCreate({ name, email, password, type });
+      const emailExiste = await this.userDAO.findEmail(email);
+        
+      if(emailExiste){
+          throw new BadRequestError("email exist");
+      }
 
       const newUser: User = { name, email, password, type };
       const result = await this.userDAO.create(newUser);
@@ -31,25 +37,30 @@ export class UserController {
       return res.status(200).json( result );
     }
     catch (error) {
-        return res.status(400).json({ message: "Internal error " + error });
+      if(error instanceof CampusError){
+        return res.status(error.statusCode).json({message: error.message});
+      }
+      if(error instanceof BadRequestError){
+        return res.status(error.statusCode).json({message: error.message});
+      }
     }
-    }
+  }
 
   private async checkCampusUpdate(user:User){
     if(user.user_id === undefined){
-      throw new Error('Error, campus user_id is not valid');
+      throw new CampusError('Error, campus user_id is not valid');
     }
     if(typeof user.user_id !== 'number' ){
-      throw new Error('Error, campus user_id is not valid');
+      throw new CampusError('Error, campus user_id is not valid');
     }
     if(typeof user.name !== 'string' || user.name.length > 150){
-      throw new Error('Error, campus name is not valid');
+      throw new CampusError('Error, campus name is not valid');
     }
     if(typeof user.email !== 'string' || user.email.length > 150 ){
-      throw new Error('Error, campus email is not valid');
+      throw new CampusError('Error, campus email is not valid');
     }
-    if (user.type !== 'admin' && user.type !== 'common_user') {
-        throw new Error('Error, campus is not valid: type admin/common_user');
+    if (user.type !== 'common_user') {
+        throw new CampusError('Error, campus is not valid: type admin/common_user');
     }
   }
 
@@ -64,7 +75,9 @@ export class UserController {
       return res.status(200).json( result );
     }
     catch (error) {
-      return res.status(400).json({ message: "Internal error " + error });  
+      if(error instanceof CampusError){
+        return res.status(error.statusCode).json({message: error.message});
+      }
     }
   }
 
