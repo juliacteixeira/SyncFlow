@@ -38,7 +38,8 @@
               ]
             },
             "scripts": [
-              "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"
+              "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js",
+              "src/assets/scripts/sidebarmenu.js"
             ]
           },
           "configurations": {

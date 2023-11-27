@@ -1,9 +1,10 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 
-import { ProjectRoutingModule } from './project-routing.module';
-import { ProjectListComponent } from './project-list/project-list.component';
+import { FormsModule } from '@angular/forms';
 import { ProjectDetailsComponent } from './project-details/project-details.component';
+import { ProjectListComponent } from './project-list/project-list.component';
+import { ProjectRoutingModule } from './project-routing.module';
 
 
 @NgModule({
@@ -13,7 +14,11 @@ import { ProjectDetailsComponent } from './project-details/project-details.compo
   ],
   imports: [
     CommonModule,
+    FormsModule,
     ProjectRoutingModule
+  ],
+  exports: [
+    ProjectListComponent
   ]
 })
 export class ProjectModule { }

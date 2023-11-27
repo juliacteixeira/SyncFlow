@@ -59,14 +59,11 @@ export class LoginComponent {
     this.notifier.notify('success', 'Login success');
     localStorage.setItem('tokenSF', token);
     localStorage.setItem('userSF', email);
-    this.router.navigate(['/dashboard']);
+    this.router.navigate(['/home']);
   }
 
   private handleRegistrationError(error: any): void {
-    this.notifier.notify('error', `Login failed. ${error}`);
-
-    console.error('Registration failed. Check your credentials.', error);
-    // Exibir mensagem de erro para o usuário ou tomar outras medidas adequadas
+    this.notifier.notify('error', `Não foi possível conectar ao sistema devido ao seguinte erro: ${error.error.message}`);
   }
 
 }

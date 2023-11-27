@@ -1,1 +1,34 @@
-<p>project-list works!</p>
+<!-- projects.component.html -->
+
+<div class="container">
+  <h2>Projetos do SyncFlow</h2>
+
+  <!-- Botões para Adicionar e Filtrar Projetos -->
+  <div class="mb-3">
+    <button class="btn btn-primary" (click)="addProject()">Adicionar Projeto</button>
+    <input type="text" placeholder="Filtrar por nome" [(ngModel)]="filterByName" />
+  </div>
+
+  <!-- Tabela de Projetos -->
+  <table class="table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nome do Projeto</th>
+        <th>Data de Início</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let project of filteredProjects">
+        <td>{{ project.id }}</td>
+        <td>{{ project.name }}</td>
+        <td>{{ project.startDate | date: 'dd/MM/yyyy' }}</td>
+        <td>
+          <button class="btn btn-sm btn-info" (click)="editProject(project.id)">Editar</button>
+          <button class="btn btn-sm btn-danger" (click)="deleteProject(project.id)">Excluir</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

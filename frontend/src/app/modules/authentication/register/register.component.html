@@ -1,46 +1,49 @@
-<div class="row justify-content-center w-100">
-  <div class="col-md-12">
-    <div class="card mb-0">
-      <div class="card-body">
-        <a href="./index.html" class="text-nowrap logo-img text-center d-block py-3 w-100">
-          <img src="../../../../assets/logo.png" width="180" alt="">
-        </a>
-        <form [formGroup]="registrationForm" (ngSubmit)="register()">
-          <div class="mb-3">
-            <label for="name" class="form-label">Nome: </label>
-            <input type="email" class="form-control" formControlName="name">
-            <div *ngIf="registrationForm?.get('name')?.hasError('required') && registrationForm?.get('name')?.touched"
-              class="text-danger">
-              Nome é obrigatório.
+<div class='container-fluid container-full d-flex vh-100'>
+  <div class="row justify-content-center align-content-center w-100">
+    <div class="col-md-8 col-lg-6">
+      <div class="card mb-0">
+        <div class="card-body">
+          <a href="./index.html" class="text-nowrap logo-img text-center d-block py-3 w-100">
+            <img src="../../../../assets/logo.png" width="180" alt="">
+          </a>
+          <form [formGroup]="registrationForm" (ngSubmit)="register()">
+            <div class="mb-3">
+              <label for="name" class="form-label">Nome: </label>
+              <input type="email" class="form-control" formControlName="name">
+              <div *ngIf="registrationForm?.get('name')?.hasError('required') && registrationForm?.get('name')?.touched"
+                class="text-danger">
+                Nome é obrigatório.
+              </div>
             </div>
-          </div>
-          <div class="mb-3">
-            <label for="email" class="form-label">Email: </label>
-            <input type="email" class="form-control" formControlName="email">
-            <div *ngIf="registrationForm?.get('email')?.hasError('required') && registrationForm?.get('email')?.touched"
-              class="text-danger">
-              Email é obrigatório.
+            <div class="mb-3">
+              <label for="email" class="form-label">Email: </label>
+              <input type="email" class="form-control" formControlName="email">
+              <div
+                *ngIf="registrationForm?.get('email')?.hasError('required') && registrationForm?.get('email')?.touched"
+                class="text-danger">
+                Email é obrigatório.
+              </div>
+              <div class='text-danger' *ngIf="registrationForm?.get('email')?.hasError('email')">
+                Email é inválido
+              </div>
             </div>
-            <div class='text-danger' *ngIf="registrationForm?.get('email')?.hasError('email')">
-              Email é inválido
+            <div class="mb-4">
+              <label for="exampleInputPassword1" class="form-label">Senha</label>
+              <input type="password" class="form-control" formControlName="password">
+              <div
+                *ngIf="registrationForm?.get('password')?.hasError('required') && registrationForm?.get('password')?.touched && registrationForm?.get('password')?.invalid"
+                class="text-danger">
+                Senha é obrigatória.
+              </div>
             </div>
-          </div>
-          <div class="mb-4">
-            <label for="exampleInputPassword1" class="form-label">Senha</label>
-            <input type="password" class="form-control" formControlName="password">
-            <div
-              *ngIf="registrationForm?.get('password')?.hasError('required') && registrationForm?.get('password')?.touched && registrationForm?.get('password')?.invalid"
-              class="text-danger">
-              Senha é obrigatória.
+            <button [disabled]='registrationForm.invalid' (click)='register()'
+              class="btn btn-primary w-100 py-8 fs-4 mb-4 rounded-2">Sign Up</button>
+            <div class="d-flex align-items-center justify-content-center">
+              <p class="fs-4 mb-0 fw-bold">Already have an Account?</p>
+              <a class="text-primary fw-bold ms-2" routerLink="/auth">Entrar</a>
             </div>
-          </div>
-          <button [disabled]='registrationForm.invalid' (click)='register()'
-            class="btn btn-primary w-100 py-8 fs-4 mb-4 rounded-2">Sign Up</button>
-          <div class="d-flex align-items-center justify-content-center">
-            <p class="fs-4 mb-0 fw-bold">Already have an Account?</p>
-            <a class="text-primary fw-bold ms-2" routerLink="/auth">Entrar</a>
-          </div>
-        </form>
+          </form>
+        </div>
       </div>
     </div>
   </div>

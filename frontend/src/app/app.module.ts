@@ -2,19 +2,21 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { HttpClientModule } from '@angular/common/http';
+import { RouterModule } from '@angular/router';
 import { NotifierModule } from 'angular-notifier';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 @NgModule({
   declarations: [
-    AppComponent,
+    AppComponent
 
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule,
     HttpClientModule,
+    RouterModule,
+    AppRoutingModule,
     NotifierModule.withConfig({
       position: {
         horizontal: {
