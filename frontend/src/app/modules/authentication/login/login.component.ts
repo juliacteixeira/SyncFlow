@@ -59,7 +59,7 @@ export class LoginComponent {
     this.notifier.notify('success', 'Login success');
     localStorage.setItem('tokenSF', token);
     localStorage.setItem('userSF', email);
-    this.router.navigate(['/home']);
+    this.router.navigate(['/app']);
   }
 
   private handleRegistrationError(error: any): void {
