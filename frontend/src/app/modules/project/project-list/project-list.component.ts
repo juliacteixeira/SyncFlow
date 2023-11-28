@@ -1,4 +1,8 @@
 import { Component } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { ProjectService } from 'src/app/core/services/project.service';
+import { Project } from 'src/shared/models/project.model';
+import { colors } from 'src/shared/utils/utils';
 
 @Component({
   selector: 'app-project-list',
@@ -6,24 +10,43 @@ import { Component } from '@angular/core';
   styleUrls: ['./project-list.component.scss']
 })
 export class ProjectListComponent {
-  projects = [
-    { id: 1, name: 'Projeto A', startDate: new Date('2023-01-01') },
-    { id: 2, name: 'Projeto B', startDate: new Date('2023-02-15') },
-    // Adicione mais projetos conforme necessário
-  ];
-
+  projects: Project[] = []
+  subscription: Subscription = new Subscription;
   filterByName: string = '';
 
-  get filteredProjects() {
+  get filteredProjects(): Project[] {
     return this.projects.filter((project) =>
-      project.name.toLowerCase().includes(this.filterByName.toLowerCase())
+      project.name_project.toLowerCase().includes(this.filterByName.toLowerCase())
     );
   }
 
-  constructor() { }
+  constructor(
+    private projectService: ProjectService
+  ) { }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+    this.loadProjects();
+  }
 
+  loadProjects(): void {
+    let index = 0;
+    this.subscription = this.projectService.getProjects().subscribe({
+      next: (data) => {
+        this.projects = data.map(project => ({
+          ...project,
+          randomColor: colors[index++ % colors.length],
+        }));
+      },
+      error: (error) => {
+        console.error('Erro ao carregar projetos', error);
+      },
+    });
+  }
+
+  ngOnDestroy(): void {
+    // Certifique-se de desinscrever o observable ao destruir o componente
+    this.subscription.unsubscribe();
+  }
   addProject() {
     // Implemente a lógica para adicionar um novo projeto
     console.log('Adicionar Projeto');
@@ -37,5 +60,10 @@ export class ProjectListComponent {
   deleteProject(projectId: number) {
     // Implemente a lógica para excluir o projeto com o ID fornecido
     console.log('Excluir Projeto ID:', projectId);
+  }
+
+  startProject(project: Project) {
+    console.log(project);
+
   }
 }

@@ -1,11 +1,11 @@
 <div class="page-wrapper" id="main-wrapper">
   <app-sidebar></app-sidebar>
   <div class='body-wrapper'>
-    <app-navbar></app-navbar>
-    <div class='container-fluid'>
-      <div class='row'>
+    <div class='mat-drawer-content mat-sidenav-content contentWrapper'>
+      <app-navbar></app-navbar>
+      <main class="pageWrapper maxWidth">
         <router-outlet></router-outlet>
-      </div>
+      </main>
     </div>
   </div>
 </div>

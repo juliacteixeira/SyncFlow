@@ -9,9 +9,6 @@ export class LayoutContentComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit() {
-    console.log('entrou no componente layout');
-
-  }
+  ngOnInit() { }
 
 }

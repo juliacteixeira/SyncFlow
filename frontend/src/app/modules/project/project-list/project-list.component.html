@@ -1,34 +1,52 @@
 <!-- projects.component.html -->
 
-<div class="container">
+<div class="container-fluid p-1">
   <h2>Projetos do SyncFlow</h2>
 
-  <!-- Botões para Adicionar e Filtrar Projetos -->
-  <div class="mb-3">
-    <button class="btn btn-primary" (click)="addProject()">Adicionar Projeto</button>
-    <input type="text" placeholder="Filtrar por nome" [(ngModel)]="filterByName" />
+
+  <div class='row'>
+    <div class='col-md-12'>
+      <div class="card mb-0 cardWithShadow">
+        <div class="card-body">
+          <div class='row d-flex'>
+            <div class='col-md-8'>
+              <div class="input-control">
+                <label>
+                  <input type="text" placeholder="" required [(ngModel)]="filterByName" />
+                  <span class="icon"><ng-icon name="heroMagnifyingGlass"></ng-icon></span>
+                  <p>Procurar</p>
+                </label>
+              </div>
+            </div>
+            <div class='col-md-4 d-flex justify-content-end align-content-end align-items-end'>
+              <button class="btn btn-primary" (click)="addProject()">Adicionar Projeto</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <!-- Tabela de Projetos -->
-  <table class="table">
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Nome do Projeto</th>
-        <th>Data de Início</th>
-        <th>Ações</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let project of filteredProjects">
-        <td>{{ project.id }}</td>
-        <td>{{ project.name }}</td>
-        <td>{{ project.startDate | date: 'dd/MM/yyyy' }}</td>
-        <td>
-          <button class="btn btn-sm btn-info" (click)="editProject(project.id)">Editar</button>
-          <button class="btn btn-sm btn-danger" (click)="deleteProject(project.id)">Excluir</button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+  <div *ngIf="filteredProjects.length > 0; else noProjects">
+    <div class="row mt-5">
+      <div class="col-md-4" *ngFor="let project of filteredProjects">
+        <div class="card card-project">
+          <div class="card-header" [style.background-color]="project.randomColor">
+            <h4>{{ project.name_project }}</h4>
+          </div>
+          <div class="card-body">
+            <p class='description'>{{ project.description }}</p>
+            <p class='start-date'>Data de Criação: {{ project.date_create | date:'dd/MM/yyyy' }}</p>
+            <p class='update-date'>Data de Última Atualização: {{ project.date_last_update | date:'dd/MM/yyyy' }}</p>
+          </div>
+          <div class="card-footer">
+            <a class="btn btn-start-project" (click)="startProject(project)">Iniciar Projeto</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #noProjects>
+    <p>Nenhum projeto encontrado.</p>
+  </ng-template>

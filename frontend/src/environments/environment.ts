@@ -1,4 +1,9 @@
-export const environment = {
+export interface Environment {
+  production: boolean;
+  apiUrl: string;
+}
+
+export const environment: Environment = {
   production: false,
-  apiUrl: 'http://localhost:3001'
+  apiUrl: 'http://localhost:3001',
 };
