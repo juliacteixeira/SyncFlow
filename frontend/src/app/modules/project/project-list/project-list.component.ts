@@ -1,7 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, TemplateRef, inject } from '@angular/core';
+import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
 import { ProjectService } from 'src/app/core/services/project.service';
 import { Project } from 'src/shared/models/project.model';
+
 import { colors } from 'src/shared/utils/utils';
 
 @Component({
@@ -13,6 +15,9 @@ export class ProjectListComponent {
   projects: Project[] = []
   subscription: Subscription = new Subscription;
   filterByName: string = '';
+
+  private modalService = inject(NgbModal);
+  closeResult = '';
 
   get filteredProjects(): Project[] {
     return this.projects.filter((project) =>
@@ -26,6 +31,7 @@ export class ProjectListComponent {
 
   ngOnInit(): void {
     this.loadProjects();
+    this.subscribeToProjectsUpdate();
   }
 
   loadProjects(): void {
@@ -47,23 +53,38 @@ export class ProjectListComponent {
     // Certifique-se de desinscrever o observable ao destruir o componente
     this.subscription.unsubscribe();
   }
-  addProject() {
-    // Implemente a lógica para adicionar um novo projeto
-    console.log('Adicionar Projeto');
-  }
-
-  editProject(projectId: number) {
-    // Implemente a lógica para editar o projeto com o ID fornecido
-    console.log('Editar Projeto ID:', projectId);
-  }
-
-  deleteProject(projectId: number) {
-    // Implemente a lógica para excluir o projeto com o ID fornecido
-    console.log('Excluir Projeto ID:', projectId);
-  }
 
   startProject(project: Project) {
     console.log(project);
 
+  }
+
+  open(content: TemplateRef<any>) {
+    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title', centered: true }).result.then(
+      (result) => {
+        this.closeResult = `Closed with: ${result}`;
+      },
+      (reason) => {
+        this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+      },
+    );
+  }
+
+  private getDismissReason(reason: any): string {
+    switch (reason) {
+      case ModalDismissReasons.ESC:
+        return 'by pressing ESC';
+      case ModalDismissReasons.BACKDROP_CLICK:
+        return 'by clicking on a backdrop';
+      default:
+        return `with: ${reason}`;
+    }
+  }
+
+  private subscribeToProjectsUpdate(): void {
+    this.projectService.projects$.subscribe(() => {
+      // Recarrega a lista de projetos
+      this.loadProjects();
+    });
   }
 }

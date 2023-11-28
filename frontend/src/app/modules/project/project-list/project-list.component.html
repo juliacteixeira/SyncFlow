@@ -2,6 +2,19 @@
 
 <div class="container-fluid p-1">
   <h2>Projetos do SyncFlow</h2>
+  <ng-template #content let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Profile update</h4>
+      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <div class="modal-body">
+      <app-project-add></app-project-add>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Save</button>
+    </div>
+  </ng-template>
+
 
 
   <div class='row'>
@@ -19,7 +32,7 @@
               </div>
             </div>
             <div class='col-md-4 d-flex justify-content-end align-content-end align-items-end'>
-              <button class="btn btn-primary" (click)="addProject()">Adicionar Projeto</button>
+              <button class="btn btn-primary" (click)="open(content)">Adicionar Projeto</button>
             </div>
           </div>
         </div>
