@@ -1,5 +1,5 @@
 import DataBase from '../config/DataBase';
-import { InternalServerError } from '../config/helpers/Api-error';
+import { BadRequestError, EmailExistError, InternalServerError } from '../config/helpers/Api-error';
 import { User } from '../models/User';
 import  bcrypt from 'bcrypt';
 
@@ -81,7 +81,7 @@ export class UserDAO {
         return result.rows;
       }
       else{
-        throw new Error('User not fould');
+        throw new BadRequestError('User not fould');
       }
     }
     catch(error){
@@ -89,7 +89,7 @@ export class UserDAO {
     }
   }
 
-  private async findUserId(user_id:number){
+  public async findUserId(user_id:number){
     try{
       const sql = 'SELECT * FROM users WHERE user_id = $1';
       const values = [user_id];
@@ -116,23 +116,25 @@ export class UserDAO {
       }
 
       if(await this.findUserId(user.user_id)){
-        const values = [user.name, user.email, user.password, user.type, user.user_id];
+        const hasPassword = await bcrypt.hash(user.password,10);
+        const values = [user.name, user.email, hasPassword, user.type, user.user_id];
         const result = await DataBase.query(sql, values);
         return await this.listAllUser();
       }
       else{
-        throw new Error('User not fould');
+        throw new BadRequestError('User not fould');
       }
     }
     catch (error) {
-      throw new Error('Error interno server' + error);
+      throw new EmailExistError('Email exist ');
     }
   }
   public async findEmail(email:string){
     const sql = 'SELECT * FROM users WHERE email = $1';
     const values = [email];
+    
     const result = await DataBase.query(sql, values);
 
-    return result.rowCount;
+    return result.rows;
   }
 }

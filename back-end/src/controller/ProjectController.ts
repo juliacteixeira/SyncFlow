@@ -1,7 +1,7 @@
 import {  Request, Response } from "express";
 import { ProjectDAO } from "../dao/ProjectDAO";
 import { Project } from "../models/Project";
-import { CampusError } from "../config/helpers/Api-error";
+import { BadRequestError, CampusError } from "../config/helpers/Api-error";
 
 export class  ProjectController{
     private projectDAO: ProjectDAO;
@@ -24,8 +24,12 @@ export class  ProjectController{
 
           return res.status(200).json(result);
         }
+
         catch (error) {
           if(error instanceof CampusError){
+            return res.status(error.statusCode).json({message: error.message});
+          }
+          if(error instanceof BadRequestError){
             return res.status(error.statusCode).json({message: error.message});
           }
           return res.status(400).json({ message: "Internal error " + error });
@@ -34,10 +38,13 @@ export class  ProjectController{
     
     private async checkCampusCreate(project:Project){
       if(typeof project.name_project !== 'string'){
-        throw new CampusError('Error, campus is not valid');
+        throw new CampusError('Error, campus name_project is not valid');
       }
       if(typeof project.description !== 'string'){
-        throw new CampusError('Error, campus is not valid');
+        throw new CampusError('Error, campus description is not valid');
+      }
+      if(!project.user_id){
+        throw new CampusError('Error, campus user_id is not valid');
       }
     }
 
@@ -86,6 +93,9 @@ export class  ProjectController{
       if(typeof project.date_create !== 'string'){
         throw new CampusError('Error, campus date_create is not valid');
       }
+      if(!project.user_id){
+        throw new CampusError('Error, campus user_id is not valid');
+      }
       
     }
     public async updateProject(req: Request, res: Response) {
@@ -113,7 +123,10 @@ export class  ProjectController{
         if(error instanceof CampusError){
           return res.status(error.statusCode).json({message: error.message});
         }
-        return res.status(400).json({ message: 'Internal error ' + error });
+        if(error instanceof BadRequestError){
+          return res.status(error.statusCode).json({message: error.message});
+        }
+       return res.status(400).json({ message: 'Internal error ' + error });
       }
     }
 }

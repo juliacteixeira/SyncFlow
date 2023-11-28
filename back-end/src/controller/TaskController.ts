@@ -1,7 +1,7 @@
 import { Request, Response, query } from 'express';
 import {Task} from '../models/Task';
 import { TaskDAO } from '../dao/TaskDAO';
-import { CampusError } from '../config/helpers/Api-error';
+import { BadRequestError, CampusError } from '../config/helpers/Api-error';
 
 
 export class TaskController{
@@ -25,6 +25,9 @@ export class TaskController{
           }
           catch (error) {
             if(error instanceof CampusError){
+              return res.status(error.statusCode).json({message: error.message});
+            }
+            if(error instanceof BadRequestError){
               return res.status(error.statusCode).json({message: error.message});
             }
             return res.status(400).json({ message: "Internal error " + error });
@@ -74,6 +77,9 @@ export class TaskController{
             
           }
           catch (error) {
+            if(error instanceof BadRequestError){
+              return res.status(error.statusCode).json({message: error.message});
+            }
             return res.status(400).json({ message: "Internal error " + error });  
           }
     }
@@ -99,6 +105,9 @@ export class TaskController{
         }
         catch (error) {
           if(error instanceof CampusError){
+            return res.status(error.statusCode).json({message: error.message});
+          }
+          if(error instanceof BadRequestError){
             return res.status(error.statusCode).json({message: error.message});
           }
           return res.status(400).json({ message: 'Internal error ' + error });

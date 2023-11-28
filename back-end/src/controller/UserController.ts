@@ -1,8 +1,8 @@
 
-import { Request, Response, query } from 'express';
+import e, { Request, Response, query } from 'express';
 import { User } from '../models/User';
 import { UserDAO } from '../dao/UserDAO';
-import { BadRequestError, CampusError } from '../config/helpers/Api-error';
+import { BadRequestError, CampusError, EmailExistError } from '../config/helpers/Api-error';
 
 export class UserController {
   private userDAO: UserDAO;
@@ -26,7 +26,7 @@ export class UserController {
       const { name, email, password, type } = req.body;
       await this.checkCampusCreate({ name, email, password, type });
       const emailExiste = await this.userDAO.findEmail(email);
-        
+      
       if(emailExiste){
           throw new BadRequestError("email exist");
       }
@@ -60,26 +60,41 @@ export class UserController {
       throw new CampusError('Error, campus email is not valid');
     }
     if (user.type !== 'common_user') {
-        throw new CampusError('Error, campus is not valid: type admin/common_user');
+        throw new CampusError('Error, campus is not valid: type common_user');
     }
   }
 
-  public async updateUser(req:Request, res:Response) {
+  public async updateUser(req: Request, res: Response) {
     try {
-      const {user_id, name, email, password, type} = req.body;
-      await this.checkCampusUpdate({user_id, name, email, password, type});
-      const userUpdate:User = {user_id, name, email, password, type};
+      const { user_id, name, email, password, type } = req.body;
+      await this.checkCampusUpdate({ user_id, name, email, password, type });
+      const userUpdate: User = { user_id, name, email, password, type };
+  
+      const existingUser = await this.userDAO.findUserId(user_id);
+
+      if (!existingUser) {
+        throw new BadRequestError("User not found");
+      }
+  
+      const emailExist = await this.userDAO.findEmail(email);
       
       const result = await this.userDAO.update(userUpdate);
-
-      return res.status(200).json( result );
-    }
-    catch (error) {
-      if(error instanceof CampusError){
-        return res.status(error.statusCode).json({message: error.message});
+      
+      
+      return res.status(200).json(result);      
+  
+      
+    } catch (error) {
+      if (error instanceof CampusError || error instanceof BadRequestError) {
+        return res.status(error.statusCode).json({ message: error.message });
       }
+      if(error instanceof EmailExistError){
+        return res.status(error.statusCode).json({ message: error.message });
+      }
+      return res.status(400).json({ message: "Internal error " + error });  
     }
   }
+  
 
   public async deleteUser(req: Request, res: Response) {
     try {
@@ -91,6 +106,9 @@ export class UserController {
       
     }
     catch (error) {
+      if (error instanceof BadRequestError) {
+        return res.status(error.statusCode).json({ message: error.message });
+      }
       return res.status(400).json({ message: "Internal error " + error });  
     }
   }

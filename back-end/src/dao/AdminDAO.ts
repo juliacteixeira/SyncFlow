@@ -74,6 +74,7 @@ export class AdminDAO{
       return result.rowCount;
     }
 
+    
     public async findById(user_id:User){
       try{
         const sql = 'SELECT * FROM users WHERE user_id = $1';

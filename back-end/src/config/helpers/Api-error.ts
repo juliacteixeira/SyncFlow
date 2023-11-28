@@ -35,3 +35,8 @@ export class CampusError extends ApiError{
         super(message, 404);
     }
 }
+export class EmailExistError extends ApiError{
+    constructor(message:string){
+        super(message, 404);
+    }
+}
