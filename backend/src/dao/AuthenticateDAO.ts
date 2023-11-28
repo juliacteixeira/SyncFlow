@@ -16,6 +16,7 @@ export class AuthenticateDAO {
             throw new Error('Error interno server' + error);
         }
     }
+    
 
     static async comparePasswords(email: string, password: string) {
         const user: AuthenticateUser | undefined = await this.findByEmail(email);

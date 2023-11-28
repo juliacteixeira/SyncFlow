@@ -1,5 +1,6 @@
 import { Project } from "../models/Project";
 import DataBase from '../config/DataBase';
+import { BadRequestError, InternalServerError } from "../config/helpers/Api-error";
 
 export class ProjectDAO{
 
@@ -12,12 +13,14 @@ export class ProjectDAO{
                 const values = [project.name_project, project.description, project.date_create, project.date_last_update, project.user_id];
                 const result = await DataBase.query(sql, values);
                 return result.rows;
+            }else{
+                 throw new BadRequestError("user_id not found");
             }
         
         }
         catch (error) {
-            throw new Error('Error interno server' + error);
-        }
+            throw new InternalServerError('Internal Server Error' + error);
+          }
     }
     public async delete(project_id:number){
         try{
@@ -26,16 +29,16 @@ export class ProjectDAO{
             if(await this.findProjectID(project_id)){
                 const values = [project_id];
       
-                const result = await DataBase.query(sql, values);
-                return result;
+                await DataBase.query(sql, values);
+                return await this.listAllProject();
             }
             else{
               throw new Error('Project not fould');
             }
         }
-        catch(error){
-            throw new Error('Error interno server' + error);
-        }
+        catch (error) {
+            throw new InternalServerError('Internal Server Error' + error);
+          }
     }
     private async findProjectID(project_id:number){
         try{
@@ -50,9 +53,9 @@ export class ProjectDAO{
                 return false;
             }
         }
-        catch(error){
-            throw new Error('Error interno server' + error);
-        }
+        catch (error) {
+            throw new InternalServerError('Internal Server Error' + error);
+          }
     }
     private async findUserId(user_id:number){
         try{
@@ -67,9 +70,9 @@ export class ProjectDAO{
             return false;
           }
         }
-        catch(error){
-          throw new Error('Error interno server' + error);
-        }
+        catch (error) {
+            throw new InternalServerError('Internal Server Error' + error);
+          }
       }
     public async listAllProject(){
         try {
@@ -78,8 +81,8 @@ export class ProjectDAO{
           return result.rows;
         }
         catch (error) {
-          throw new Error('Error interno server' + error);
-        }
+            throw new InternalServerError('Internal Server Error' + error);
+          }
     }
 
     public async listProject(params: any){
@@ -106,29 +109,32 @@ export class ProjectDAO{
             return result.rows;  
         }
         catch (error) {
-          throw new Error('Error interno server' + error);
+            throw new InternalServerError('Internal Server Error' + error);
         }
       }
 
     public async update(project: Project){
         try {
-            const sql = 'UPDATE project SET name_project = $1, description = $2, date_create = $3, date_last_update = $4 WHERE project_id = $5';
+            const sql = 'UPDATE project SET name_project = $1, description = $2, date_create = $3, date_last_update = $4, user_id = $5 WHERE project_id = $6';
             
             if(project.project_id === undefined){
-                throw new Error('project_id is required');
+                throw new BadRequestError('project_id is required');
             }
+            if(! await this.findProjectID(project.project_id)){
+                throw new BadRequestError("project_id not found");
+            }
+            if(! await this.findUserId(project.user_id)){
+                throw new BadRequestError("user_id not found");
+            }
+
+            const values = [project.name_project, project.description, project.date_create, project.date_last_update, project.user_id,project.project_id];
+            await DataBase.query(sql, values);
+           
+            return await this.listAllProject();
         
-            if(await this.findProjectID(project.project_id) && await this.findUserId(project.user_id)){
-                const values = [project.name_project, project.description, project.date_create, project.date_last_update, project.project_id];
-                const result = await DataBase.query(sql, values);
-                return result;
-            }
-            else{
-                throw new Error('Project not fould');
-            }
         }
         catch (error) {
-            throw new Error('Error interno server' + error);
-        }
+            throw new InternalServerError('Internal Server Error' + error);
+          }
     }
 }

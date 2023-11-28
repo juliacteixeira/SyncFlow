@@ -1,4 +1,5 @@
 import DataBase from "../config/DataBase";
+import { BadRequestError, InternalServerError } from "../config/helpers/Api-error";
 import { Task } from "../models/Task";
 
 export class TaskDAO{
@@ -13,11 +14,11 @@ export class TaskDAO{
                 return result.rows;
             }
             else{
-                throw new Error('Project not found');
+                throw new BadRequestError('Project not found');
             }
         }
         catch (error) {
-            throw new Error('Error interno server' + error);
+            throw new InternalServerError('Internal Server Error' + error);
         }
     }
 
@@ -54,7 +55,7 @@ export class TaskDAO{
             return result.rows;  
         }
         catch (error) {
-          throw new Error('Error interno server' + error);
+            throw new InternalServerError('Internal Server Error' + error);
         }
     }
 
@@ -65,7 +66,7 @@ export class TaskDAO{
             return result.rows;
           }
           catch (error) {
-            throw new Error('Error interno server' + error);
+            throw new InternalServerError('Internal Server Error' + error);
           }
     }
 
@@ -82,8 +83,8 @@ export class TaskDAO{
                 return false;
             }
         }
-        catch(error){
-            throw new Error('Error interno server' + error);
+        catch (error) {
+            throw new InternalServerError('Internal Server Error' + error);
         }
     }
 
@@ -100,8 +101,8 @@ export class TaskDAO{
                 return false;
             }
         }
-        catch(error){
-            throw new Error('Error interno server' + error);
+        catch (error) {
+            throw new InternalServerError('Internal Server Error' + error);
         }
 
     }
@@ -110,17 +111,16 @@ export class TaskDAO{
             const sql = 'DELETE FROM tasks WHERE task_id = $1';
             
             if(await this.findTaskID(task_id)){
-              const values = [task_id];
-      
-              const result = await DataBase.query(sql, values);
-             
+                const values = [task_id];
+                await DataBase.query(sql, values);
+                return await this.listAllTask();
             }
             else{
-              throw new Error('Project not fould');
+              throw new BadRequestError('Project not fould');
             }
         }
-        catch(error){
-            throw new Error('Error interno server' + error);
+        catch (error) {
+            throw new InternalServerError('Internal Server Error' + error);
         }
     }
     public async update(task:Task){
@@ -128,20 +128,24 @@ export class TaskDAO{
             const sql = 'UPDATE tasks SET name_task = $1, description = $2, status = $3, data_create = $4, date_conclusion = $5, project_id = $6 WHERE task_id = $7';
             
             if(task.task_id === undefined){
-                throw new Error('task_id is required');
+                throw new BadRequestError('task_id is required');
             }
-        
-            if(await this.findProjectID(task.project_id) && await this.findTaskID(task.task_id)){
-                const values = [task.name_task, task.description, task.status, task.data_create, task.date_conclusion, task.project_id, task.task_id];
-                const result = await DataBase.query(sql, values);
-                return await this.listAllTask();
+            
+            if(! await this.findTaskID(task.task_id)){
+                throw new BadRequestError("task_id notr found");
             }
-            else{
-                throw new Error('Task not fould');
+
+            if(! await this.findProjectID(task.project_id)){
+                throw new BadRequestError("project_id not found");
             }
+            
+            const values = [task.name_task, task.description, task.status, task.data_create, task.date_conclusion, task.project_id, task.task_id];
+            await DataBase.query(sql, values);
+            
+            return await this.listAllTask();
         }
         catch (error) {
-            throw new Error('Error interno server' + error);
+            throw new InternalServerError('Internal Server Error' + error);
         }
     }
 }

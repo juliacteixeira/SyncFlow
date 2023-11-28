@@ -1,6 +1,7 @@
 import {  Request, Response } from "express";
 import { ProjectDAO } from "../dao/ProjectDAO";
 import { Project } from "../models/Project";
+import { BadRequestError, CampusError } from "../config/helpers/Api-error";
 
 export class  ProjectController{
     private projectDAO: ProjectDAO;
@@ -23,17 +24,27 @@ export class  ProjectController{
 
           return res.status(200).json(result);
         }
+
         catch (error) {
+          if(error instanceof CampusError){
+            return res.status(error.statusCode).json({message: error.message});
+          }
+          if(error instanceof BadRequestError){
+            return res.status(error.statusCode).json({message: error.message});
+          }
           return res.status(400).json({ message: "Internal error " + error });
         }
     }
     
     private async checkCampusCreate(project:Project){
       if(typeof project.name_project !== 'string'){
-        throw new Error('Error, campus is not valid');
+        throw new CampusError('Error, campus name_project is not valid');
       }
       if(typeof project.description !== 'string'){
-        throw new Error('Error, campus is not valid');
+        throw new CampusError('Error, campus description is not valid');
+      }
+      if(!project.user_id){
+        throw new CampusError('Error, campus user_id is not valid');
       }
     }
 
@@ -71,16 +82,19 @@ export class  ProjectController{
 
     private async checkCampusUpdate(project: Project){
       if(project.project_id === undefined){
-        throw new Error('Error, campus project_id is not valid');
+        throw new CampusError('Error, campus project_id is not valid');
       }
       if(typeof project.project_id !== 'number' ){
-        throw new Error('Error, campus user_id is not valid');
+        throw new CampusError('Error, campus user_id is not valid');
       }
       if(typeof project.name_project !== 'string' || project.name_project.length > 150){
-        throw new Error('Error, campus name_project is not valid');
+        throw new CampusError('Error, campus name_project is not valid');
       }
       if(typeof project.date_create !== 'string'){
-        throw new Error('Error, campus date_create is not valid');
+        throw new CampusError('Error, campus date_create is not valid');
+      }
+      if(!project.user_id){
+        throw new CampusError('Error, campus user_id is not valid');
       }
       
     }
@@ -106,7 +120,13 @@ export class  ProjectController{
         return res.status(200).json(result);
       }
       catch (error) {
-        return res.status(400).json({ message: 'Internal error ' + error });
+        if(error instanceof CampusError){
+          return res.status(error.statusCode).json({message: error.message});
+        }
+        if(error instanceof BadRequestError){
+          return res.status(error.statusCode).json({message: error.message});
+        }
+       return res.status(400).json({ message: 'Internal error ' + error });
       }
     }
 }

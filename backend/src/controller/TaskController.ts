@@ -1,6 +1,7 @@
 import { Request, Response, query } from 'express';
 import {Task} from '../models/Task';
 import { TaskDAO } from '../dao/TaskDAO';
+import { BadRequestError, CampusError } from '../config/helpers/Api-error';
 
 
 export class TaskController{
@@ -23,22 +24,28 @@ export class TaskController{
             return res.status(200).json(result);
           }
           catch (error) {
+            if(error instanceof CampusError){
+              return res.status(error.statusCode).json({message: error.message});
+            }
+            if(error instanceof BadRequestError){
+              return res.status(error.statusCode).json({message: error.message});
+            }
             return res.status(400).json({ message: "Internal error " + error });
           }
     }
 
     private async checkCampusCreate(project:Task){
         if(typeof project.name_task !== 'string'){
-            throw new Error('Error, campus name_task is not valid');
+            throw new CampusError('Error, campus name_task is not valid');
         }
         if(typeof project.description !== 'string'){
-            throw new Error('Error, campus description is not valid');
+            throw new CampusError('Error, campus description is not valid');
         }
         if(typeof project.status !== 'string'){
-            throw new Error('Error, campus status is not valid');
+            throw new CampusError('Error, campus status is not valid');
         }
         if(typeof project.project_id !== 'number'){
-            throw new Error('Error, campus project_id is not valid');
+            throw new CampusError('Error, campus project_id is not valid');
         }
     }
 
@@ -70,48 +77,57 @@ export class TaskController{
             
           }
           catch (error) {
+            if(error instanceof BadRequestError){
+              return res.status(error.statusCode).json({message: error.message});
+            }
             return res.status(400).json({ message: "Internal error " + error });  
           }
     }
     public  async updateTask(req:Request, res:Response){
-        try {
-            const { task_id,name_task,description,status,data_create,date_conclusion,project_id } = req.body;
+      try {
+          const { task_id,name_task,description,status,data_create,date_conclusion,project_id } = req.body;
+  
+          const taskUpdate: Task = {
+            task_id,
+            name_task,
+            description,
+            status,
+            data_create,
+            date_conclusion,
+            project_id
+          };
     
-            const taskUpdate: Task = {
-              task_id,
-              name_task,
-              description,
-              status,
-              data_create,
-              date_conclusion,
-              project_id
-            };
-      
-            await this.checkCampusUpdate({ task_id,name_task,description,status,data_create,date_conclusion,project_id});
-      
-            const result = await this.taskDAO.update(taskUpdate);
-      
-            return res.status(200).json(result);
+          await this.checkCampusUpdate({ task_id,name_task,description,status,data_create,date_conclusion,project_id});
+    
+          const result = await this.taskDAO.update(taskUpdate);
+    
+          return res.status(200).json(result);
+        }
+        catch (error) {
+          if(error instanceof CampusError){
+            return res.status(error.statusCode).json({message: error.message});
           }
-          catch (error) {
-            return res.status(400).json({ message: 'Internal error ' + error });
+          if(error instanceof BadRequestError){
+            return res.status(error.statusCode).json({message: error.message});
           }
+          return res.status(400).json({ message: 'Internal error ' + error });
+        }
     }
     private async checkCampusUpdate(task: Task){
         if(task.task_id === undefined){
-          throw new Error('Error, campus project_id is not valid');
+          throw new CampusError('Error, campus project_id is not valid');
         }
         if(typeof task.task_id !== 'number' ){
-          throw new Error('Error, campus user_id is not valid');
+          throw new CampusError('Error, campus user_id is not valid');
         }
         if(typeof task.name_task !== 'string' || task.name_task.length > 150){
-          throw new Error('Error, campus name_project is not valid');
+          throw new CampusError('Error, campus name_project is not valid');
         }
         if(typeof task.status !== 'string'){
-          throw new Error('Error, campus date_create is not valid');
+          throw new CampusError('Error, campus date_create is not valid');
         }
         if(typeof task.project_id !== 'number' ){
-            throw new Error('Error, campus user_id is not valid');
+            throw new CampusError('Error, campus user_id is not valid');
           }
       }
 }
