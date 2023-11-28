@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { ILoginResponse } from 'src/shared/models/auth.model';
 
 
@@ -23,10 +23,13 @@ export class AuthService {
     return this.http.post<any>(url, credentials);
   }
 
-  logout(): void {
+  logout(): Observable<boolean> {
     // Implemente a lógica real de logout aqui
     // Aqui, apenas definimos isAuthenticated como false para simular um logout
+    localStorage.clear()
     this.isAuthenticated = false;
+
+    return of(false);
   }
 
   isAuthenticatedUser(): boolean {
