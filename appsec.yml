@@ -1,0 +1,16 @@
+version: 0.0
+os: linux
+files:
+  - source: /
+    destination: /home/ec2-user/SyncFlow
+hooks:
+  BeforeInstall:
+    - location: scripts/before_install_backend.sh
+      runas: ec2-user
+    - location: scripts/before_install_frontend.sh
+      runas: ec2-user
+  AfterInstall:
+    - location: scripts/after_install_backend.sh
+      runas: ec2-user
+    - location: scripts/after_install_frontend.sh
+      runas: ec2-user

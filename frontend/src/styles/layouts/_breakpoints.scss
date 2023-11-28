@@ -1,0 +1,17 @@
+// _breakpoints.scss
+
+$breakpoints: (
+  xs: 0,
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px,
+  xxl: 1400px
+);
+
+@mixin media-breakpoint-down($breakpoint) {
+  $max-width: map-get($breakpoints, $breakpoint) - 1;
+  @media (max-width: $max-width) {
+    @content;
+  }
+}

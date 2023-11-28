@@ -1,0 +1,33 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - deploy
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set Up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '14'
+
+      - name: Install Dependencies
+        run: |
+          cd backend
+          npm install
+
+      - name: Build and Deploy
+        run: |
+          cd backend
+          npm run build  # ou o comando para construir sua aplicação
+
+      - name: Deploy to EC2
+        run: |
+          scp -i path/to/your/key.pem -r backend ec2-user@your-ec2-ip:/path/to/destination
