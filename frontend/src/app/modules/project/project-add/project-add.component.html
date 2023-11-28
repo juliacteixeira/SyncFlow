@@ -1,0 +1,19 @@
+<form [formGroup]="projectForm" (ngSubmit)="onSubmit()">
+  <label for="name_project">Nome do Projeto:</label>
+  <input type="text" id="name_project" formControlName="name_project" />
+  <div *ngIf="projectForm?.get('name_project')?.hasError('required') && projectForm.get('name_project')?.touched"
+    class="error-message">
+    Nome do Projeto é obrigatório.
+  </div>
+
+  <label for="description">Descrição do Projeto:</label>
+  <textarea id="description" formControlName="description"></textarea>
+  <div *ngIf="projectForm?.get('description')?.hasError('required') && projectForm.get('description')?.touched"
+    class="error-message">
+    Descrição do Projeto é obrigatória.
+  </div>
+
+  <!-- Adicione outros campos do seu projeto, como date_create, date_last_update, etc. -->
+
+  <button type="submit">Adicionar Projeto</button>
+</form>
