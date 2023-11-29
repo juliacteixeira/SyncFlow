@@ -54,10 +54,5 @@ export class ProjectService {
       date_last_update: new Date(),
       user_id: 14
     }
-
-  }
-
-  updateProjects(): void {
-    this.projectsSubject.next();
   }
 }

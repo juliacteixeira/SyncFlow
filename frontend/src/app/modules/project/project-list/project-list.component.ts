@@ -1,9 +1,11 @@
 import { Component, TemplateRef, inject } from '@angular/core';
+import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NotifierService } from 'angular-notifier';
 import { Subscription, catchError, of, tap } from 'rxjs';
 import { ProjectService } from 'src/app/core/services/project.service';
 import { Project } from 'src/shared/models/project.model';
+import { ProjectDetailsComponent } from './../project-details/project-details.component';
 
 import { colors } from 'src/shared/utils/utils';
 
@@ -29,6 +31,7 @@ export class ProjectListComponent {
 
   constructor(
     private projectService: ProjectService,
+    private router: Router,
     private notifierService: NotifierService
   ) {
     this.notifier = this.notifierService
@@ -62,12 +65,21 @@ export class ProjectListComponent {
 
   }
 
-  open(content: TemplateRef<any>) {
-    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title', centered: true }).result.then(
+  addProject(newProject: TemplateRef<any>) {
+    this.modalService.open(newProject, { ariaLabelledBy: 'modal-basic-title', centered: true }).result.then(
       (result) => {
         this.closeResult = `Closed with: ${result}`;
       },
     );
+  }
+
+  openProject(projectDetails: TemplateRef<any>, project: Project) {
+    const modalRef = this.modalService.open(ProjectDetailsComponent, { ariaLabelledBy: 'modal-basic-title', centered: true, size: 'xl' });
+    modalRef.componentInstance.project = project;
+
+    console.log(project);
+
+
   }
 
   private subscribeToProjectsUpdate(project: Project[]): void {
@@ -91,6 +103,13 @@ export class ProjectListComponent {
       })
     ).subscribe();
   }
+
+
+  createTask(project: Project) {
+    console.log(project.project_id);
+
+  }
+
 
 
   private handleSuccess(message: string): void {

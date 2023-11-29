@@ -2,18 +2,6 @@
 
 <div class="container-fluid p-1">
   <h2>Projetos do SyncFlow</h2>
-  <ng-template #content let-modal>
-    <div class="modal-header">
-      <h4 class="modal-title" id="modal-basic-title">Profile update</h4>
-      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
-    </div>
-    <div class="modal-body">
-      <app-project-add (onFormChange)="saveProject($event)"></app-project-add>
-    </div>
-  </ng-template>
-
-
-
   <div class='row'>
     <div class='col-md-12'>
       <div class="card mb-0 cardWithShadow">
@@ -29,7 +17,7 @@
               </div>
             </div>
             <div class='col-md-4 d-flex justify-content-end align-content-end align-items-end'>
-              <button class="btn btn-primary" (click)="open(content)">Adicionar Projeto</button>
+              <button class="btn btn-primary" (click)="addProject(newProject)">Adicionar Projeto</button>
             </div>
           </div>
         </div>
@@ -42,7 +30,10 @@
       <div class="col-md-4" *ngFor="let project of filteredProjects">
         <div class="card card-project">
           <div class="card-header" [style.background-color]="project.randomColor">
-            <h4>{{ project.name_project }}</h4>
+            <h4>
+              {{ project.name_project }}
+            </h4>
+            <ng-icon name='heroPlay' (click)='openProject(projectDetails, project)'></ng-icon>
           </div>
           <div class="card-body">
             <p class='description'>{{ project.description }}</p>
@@ -51,6 +42,7 @@
           </div>
           <div class="card-footer">
             <a class="btn btn-start-project" (click)="startProject(project)">Iniciar Projeto</a>
+            <a class="btn btn-start-project" (click)="createTask(project)">Criar tarefa</a>
           </div>
         </div>
       </div>
@@ -59,4 +51,26 @@
 
   <ng-template #noProjects>
     <p>Nenhum projeto encontrado.</p>
+  </ng-template>
+
+
+  <ng-template #newProject let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Novo Projeto</h4>
+      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <div class="modal-body">
+      <app-project-add (onFormChange)="saveProject($event)"></app-project-add>
+    </div>
+  </ng-template>
+
+
+  <ng-template #projectDetails let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Projeto Detalhes</h4>
+      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <div class="modal-body">
+      <app-project-details></app-project-details>
+    </div>
   </ng-template>

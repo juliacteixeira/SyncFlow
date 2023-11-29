@@ -4,6 +4,16 @@
   &.card-project {
     .card-header {
       padding: 10px;
+      display: flex;
+      justify-content: space-between;
+      color: #fff;
+      align-items: baseline;
+
+      ng-icon {
+        font-weight: 600;
+        font-size: 20px;
+        cursor: pointer;
+      }
 
       h4 {
         color: #fff;
