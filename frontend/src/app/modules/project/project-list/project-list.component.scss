@@ -1,12 +1,19 @@
-$color_1: var(--bs-blue, #5d87ff);
-$background-color_1: #fff;
-
 .card {
   box-shadow: #919eab4d 0 0 2px, #919eab1f 0 12px 24px -4px;
 
   &.card-project {
     .card-header {
       padding: 10px;
+      display: flex;
+      justify-content: space-between;
+      color: #fff;
+      align-items: baseline;
+
+      ng-icon {
+        font-weight: 600;
+        font-size: 20px;
+        cursor: pointer;
+      }
 
       h4 {
         color: #fff;
@@ -74,70 +81,5 @@ $background-color_1: #fff;
         }
       }
     }
-  }
-}
-
-label {
-  position: relative;
-
-  select {
-    width: 25rem;
-    border: 2px solid var(--bs-blue, #5d87ff);
-    border-radius: 8px;
-    padding: 1rem 1.5rem;
-    font-size: 1rem;
-    outline: none;
-
-    &:valid~p {
-      transform: translateY(-35px);
-    }
-
-    &:focus~p {
-      transform: translateY(-35px);
-    }
-
-    &:not(:valid)~p {
-      transform: translateY(-10px);
-    }
-  }
-
-  input {
-    width: 25rem;
-    border: 2px solid var(--bs-blue, #5d87ff);
-    border-radius: 8px;
-    padding: 1rem 1.5rem;
-    font-size: 1rem;
-    outline: none;
-
-    &:focus~p {
-      transform: translateY(-35px);
-    }
-
-    &:valid~p {
-      transform: translateY(-35px);
-    }
-  }
-
-  .icon {
-    position: absolute;
-    top: 50%;
-    right: 10px;
-    transform: translateY(-50%);
-    color: $color_1;
-    font-size: 20px;
-  }
-
-  p {
-    pointer-events: none;
-    position: absolute;
-    padding: 0 0.5rem;
-    top: 40%;
-    margin-left: 0.8rem;
-    transform: translateY(-10px);
-    color: $color_1;
-    background-color: $background-color_1;
-    font-size: 0.95rem;
-    transition: all 0.5s;
-    margin-bottom: 0;
   }
 }

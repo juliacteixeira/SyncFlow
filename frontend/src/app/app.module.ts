@@ -6,6 +6,7 @@ import { RouterModule } from '@angular/router';
 import { NotifierModule } from 'angular-notifier';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { AppComponent } from './app.component';
         }
       },
 
-    })
+    }),
+    NgbModule
   ],
   providers: [],
   bootstrap: [AppComponent]

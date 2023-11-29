@@ -1,1 +1,16 @@
-<p>project-details works!</p>
+<div class="modal-header">
+  <h4 class="modal-title" id="modal-basic-title">{{project.name_project}}</h4>
+  <button type="button" class="btn-close" aria-label="Close" (click)="activeModal.dismiss('Cross click')"></button>
+</div>
+<div class="modal-body">
+  <div class='row'>
+    <div class='col-md-3' id='description'>
+      <p class='description'>{{ project.description }}</p>
+      <p class='start-date'>Data de Criação: {{ project.date_create | date:'dd/MM/yyyy' }}</p>
+      <p class='update-date'>Data de Última Atualização: {{ project.date_last_update | date:'dd/MM/yyyy' }}</p>
+    </div>
+    <div class='col-md-9'>
+      <!-- aqui irá vir as tasks -->
+    </div>
+  </div>
+</div>
