@@ -1,6 +1,7 @@
 import { Component, TemplateRef, inject } from '@angular/core';
-import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { Subscription } from 'rxjs';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NotifierService } from 'angular-notifier';
+import { Subscription, catchError, of, tap } from 'rxjs';
 import { ProjectService } from 'src/app/core/services/project.service';
 import { Project } from 'src/shared/models/project.model';
 
@@ -15,6 +16,7 @@ export class ProjectListComponent {
   projects: Project[] = []
   subscription: Subscription = new Subscription;
   filterByName: string = '';
+  private readonly notifier!: NotifierService;
 
   private modalService = inject(NgbModal);
   closeResult = '';
@@ -26,16 +28,18 @@ export class ProjectListComponent {
   }
 
   constructor(
-    private projectService: ProjectService
-  ) { }
+    private projectService: ProjectService,
+    private notifierService: NotifierService
+  ) {
+    this.notifier = this.notifierService
+  }
 
   ngOnInit(): void {
     this.loadProjects();
-    this.subscribeToProjectsUpdate();
   }
 
   loadProjects(): void {
-    let index = 0;
+    let index = Math.floor(Math.random() * colors.length);
     this.subscription = this.projectService.getProjects().subscribe({
       next: (data) => {
         this.projects = data.map(project => ({
@@ -50,7 +54,6 @@ export class ProjectListComponent {
   }
 
   ngOnDestroy(): void {
-    // Certifique-se de desinscrever o observable ao destruir o componente
     this.subscription.unsubscribe();
   }
 
@@ -64,27 +67,43 @@ export class ProjectListComponent {
       (result) => {
         this.closeResult = `Closed with: ${result}`;
       },
-      (reason) => {
-        this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-      },
     );
   }
 
-  private getDismissReason(reason: any): string {
-    switch (reason) {
-      case ModalDismissReasons.ESC:
-        return 'by pressing ESC';
-      case ModalDismissReasons.BACKDROP_CLICK:
-        return 'by clicking on a backdrop';
-      default:
-        return `with: ${reason}`;
-    }
-  }
+  private subscribeToProjectsUpdate(project: Project[]): void {
+    let index = Math.floor(Math.random() * colors.length);
 
-  private subscribeToProjectsUpdate(): void {
-    this.projectService.projects$.subscribe(() => {
-      // Recarrega a lista de projetos
-      this.loadProjects();
+    this.projects.push({
+      ...project[0],
+      randomColor: colors[index],
     });
   }
+
+  saveProject(formData: any) {
+    this.projectService.addProject(formData).pipe(
+      tap((response) => {
+        this.subscribeToProjectsUpdate(response);
+        this.handleSuccess('Projeto adicionado com sucesso.');
+      }),
+      catchError(error => {
+        this.handleError('Erro ao adicionar projeto', error);
+        return of(null)
+      })
+    ).subscribe();
+  }
+
+
+  private handleSuccess(message: string): void {
+    this.notifier.notify('success', message);
+    this.modalService.dismissAll();
+
+  }
+
+  private handleError(message: string, error: any): void {
+    console.error(message, error);
+    this.notifier.notify('error', message);
+
+  }
+
+
 }

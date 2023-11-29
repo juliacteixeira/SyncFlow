@@ -8,10 +8,7 @@
       <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
     </div>
     <div class="modal-body">
-      <app-project-add></app-project-add>
-    </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Save</button>
+      <app-project-add (onFormChange)="saveProject($event)"></app-project-add>
     </div>
   </ng-template>
 

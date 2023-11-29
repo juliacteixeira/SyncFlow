@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ProjectService } from 'src/app/core/services/project.service';
 
 @Component({
@@ -14,9 +14,13 @@ import { ProjectService } from 'src/app/core/services/project.service';
 export class ProjectAddComponent implements OnInit {
   projectForm!: FormGroup;
 
+  @Output() private onFormChange = new EventEmitter<any>();
+
+
   constructor(
     private fb: FormBuilder,
     public activeModal: NgbActiveModal,
+    public modalService: NgbModal,
     private projectService: ProjectService
   ) {
 
@@ -30,35 +34,12 @@ export class ProjectAddComponent implements OnInit {
     this.projectForm = this.fb.group({
       name_project: ['', Validators.required],
       description: ['', Validators.required],
-      // Adicione outros campos do seu projeto, como date_create, date_last_update, etc.
     });
   }
   onSubmit(): void {
     if (this.projectForm.valid) {
-      const newProject = this.projectForm.value;
-
-      this.projectService.addProject(newProject).subscribe({
-        next: () => this.handleSuccess('Projeto adicionado com sucesso.'),
-        error: (error) => this.handleError('Erro ao adicionar projeto', error),
-        complete: () => {
-          // Fecha a modal (exemplo hipotético)
-          this.closeModal();
-        },
-      });
+      this.onFormChange.emit(this.projectForm.value)
     }
-  }
-
-  private handleSuccess(message: string): void {
-    console.log(message);
-    this.projectForm.reset();
-  }
-
-  private handleError(message: string, error: any): void {
-    console.error(message, error);
-  }
-
-  private closeModal(): void {
-    this.activeModal.close('Projeto adicionado com sucesso')
   }
 
 }

@@ -1,19 +1,29 @@
 <form [formGroup]="projectForm" (ngSubmit)="onSubmit()">
-  <label for="name_project">Nome do Projeto:</label>
-  <input type="text" id="name_project" formControlName="name_project" />
-  <div *ngIf="projectForm?.get('name_project')?.hasError('required') && projectForm.get('name_project')?.touched"
-    class="error-message">
-    Nome do Projeto é obrigatório.
+  <div class='row'>
+    <div class='col-md-12'>
+      <div class='input-control'>
+        <label>
+          <input type="text" placeholder="" formControlName="name_project" />
+          <p>Nome do Projeto:</p>
+        </label>
+        <div *ngIf="projectForm?.get('name_project')?.hasError('required') && projectForm.get('name_project')?.touched"
+          class="text-danger">
+          Nome do Projeto é obrigatório.
+        </div>
+      </div>
+      <div class='input-control mt-4'>
+        <label for="description">
+          <textarea id="description" formControlName="description"></textarea>
+          <p class='p-textarea'>Descrição do Projeto: </p>
+        </label>
+        <div *ngIf="projectForm?.get('description')?.hasError('required') && projectForm.get('description')?.touched"
+          class="text-danger">
+          Descrição do Projeto é obrigatória.
+        </div>
+      </div>
+      <div class='modal-footer'>
+        <button type="submit" class="btn btn-outline-dark">Adicionar Projeto</button>
+      </div>
+    </div>
   </div>
-
-  <label for="description">Descrição do Projeto:</label>
-  <textarea id="description" formControlName="description"></textarea>
-  <div *ngIf="projectForm?.get('description')?.hasError('required') && projectForm.get('description')?.touched"
-    class="error-message">
-    Descrição do Projeto é obrigatória.
-  </div>
-
-  <!-- Adicione outros campos do seu projeto, como date_create, date_last_update, etc. -->
-
-  <button type="submit">Adicionar Projeto</button>
 </form>

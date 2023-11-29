@@ -157,6 +157,9 @@
   --bs-breakpoint-xxl: 1400px
 }
 
+$color_1: var(--bs-blue, #5d87ff);
+$background-color_1: #fff;
+
 [data-bs-theme=dark] {
   --bs-body-color: #5A6A85;
   --bs-body-color-rgb: 90, 106, 133;
@@ -3000,6 +3003,72 @@ progress {
   .form-control {
     -webkit-transition: none;
     transition: none
+  }
+}
+
+
+label {
+  position: relative;
+
+  select {
+    width: 25rem;
+    border: 2px solid var(--bs-blue, #5d87ff);
+    border-radius: 8px;
+    padding: 1rem 1.5rem;
+    font-size: 1rem;
+    outline: none;
+
+    &:valid~p {
+      transform: translateY(-35px);
+    }
+
+    &:focus~p {
+      transform: translateY(-35px);
+    }
+
+    &:not(:valid)~p {
+      transform: translateY(-10px);
+    }
+  }
+
+  input {
+    width: 25rem;
+    border: 2px solid var(--bs-blue, #5d87ff);
+    border-radius: 8px;
+    padding: 1rem 1.5rem;
+    font-size: 1rem;
+    outline: none;
+
+    &:focus~p {
+      transform: translateY(-35px);
+    }
+
+    &:valid~p {
+      transform: translateY(-35px);
+    }
+  }
+
+  .icon {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    color: $color_1;
+    font-size: 20px;
+  }
+
+  p {
+    pointer-events: none;
+    position: absolute;
+    padding: 0 0.5rem;
+    top: 40%;
+    margin-left: 0.8rem;
+    transform: translateY(-10px);
+    color: $color_1;
+    background-color: $background-color_1;
+    font-size: 0.95rem;
+    transition: all 0.5s;
+    margin-bottom: 0;
   }
 }
 

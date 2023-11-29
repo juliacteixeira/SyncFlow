@@ -44,6 +44,6 @@ testem.log
 Thumbs.db
 
 #Backend
-/back-end/node_modules
-/back-end/package-lock.json
-/back-end/.env
+/backend/node_modules
+/backend/package-lock.json
+/backend/.env
