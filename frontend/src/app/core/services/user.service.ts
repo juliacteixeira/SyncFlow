@@ -1,4 +1,6 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable, catchError, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -6,12 +8,24 @@ import { Injectable } from '@angular/core';
 export class UserService {
   apiUrl = 'http://localhost:3001'
 
-  constructor() { }
+  constructor(
+    private http: HttpClient
+  ) { }
 
-  getUser() {
-    const url = `${this.apiUrl}/user`
-    console.log(url);
 
+
+  public getUser(): Observable<any> {
+
+    const url = `${this.apiUrl}/user`;
+
+    return this.http.get<any>(url)
+      .pipe(
+        tap(data => console.log('Dados do usuario:', data)),
+        catchError(error => {
+          console.error('Erro na requisição:', error);
+          throw error; // rethrow the error
+        })
+      );
   }
 
 }

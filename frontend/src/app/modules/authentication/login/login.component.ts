@@ -42,9 +42,9 @@ export class LoginComponent {
 
       this.authService.login(email, password).pipe(
         tap((response) => {
-          console.log(typeof response);
+          console.log(response);
 
-          this.handleRegistrationSuccess(response, email);
+          this.handleRegistrationSuccess(response);
         }),
         catchError(error => {
           this.handleRegistrationError(error);
@@ -55,10 +55,11 @@ export class LoginComponent {
 
   }
 
-  private handleRegistrationSuccess(token: any, email: string): void {
+  private handleRegistrationSuccess(response: any): void {
     this.notifier.notify('success', 'Login success');
-    localStorage.setItem('tokenSF', token);
-    localStorage.setItem('userSF', email);
+    localStorage.setItem('tokenSF', response.token);
+    localStorage.setItem('userEmailSF', response.emailUser.email);
+    localStorage.setItem('userIdSF', response.emailUser.user_id);
     this.router.navigate(['/app']);
   }
 

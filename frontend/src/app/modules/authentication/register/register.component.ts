@@ -36,9 +36,6 @@ export class RegisterComponent {
   }
 
   register(): void {
-    console.log('entrou aqui');
-    console.log(this.registrationForm);
-
     if (this.registrationForm.valid) {
       const { name, email, password } = this.registrationForm.value;
       this.authService.register(name, email, password).pipe(
@@ -60,7 +57,7 @@ export class RegisterComponent {
     console.log('success');
 
     this.notifier.notify('success', 'Registration successful! Redirecting to dashboard.');
-    this.router.navigate(['/dashboard']);
+    this.router.navigate(['/']);
   }
 
   private handleRegistrationError(error: any): void {

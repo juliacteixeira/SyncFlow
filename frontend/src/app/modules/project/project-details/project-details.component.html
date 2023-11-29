@@ -10,7 +10,7 @@
       <p class='update-date'>Data de Última Atualização: {{ project.date_last_update | date:'dd/MM/yyyy' }}</p>
     </div>
     <div class='col-md-9'>
-      <!-- aqui irá vir as tasks -->
+      <app-task [projectId]='project.project_id ?? 0'></app-task>
     </div>
   </div>
 </div>

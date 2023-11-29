@@ -7,6 +7,7 @@ import { ProjectService } from 'src/app/core/services/project.service';
 import { Project } from 'src/shared/models/project.model';
 import { ProjectDetailsComponent } from './../project-details/project-details.component';
 
+import { UserService } from 'src/app/core/services/user.service';
 import { colors } from 'src/shared/utils/utils';
 
 @Component({
@@ -19,18 +20,21 @@ export class ProjectListComponent {
   subscription: Subscription = new Subscription;
   filterByName: string = '';
   private readonly notifier!: NotifierService;
+  user: any
 
   private modalService = inject(NgbModal);
   closeResult = '';
+  private userId = localStorage.getItem('userIdSF');
 
   get filteredProjects(): Project[] {
     return this.projects.filter((project) =>
-      project.name_project.toLowerCase().includes(this.filterByName.toLowerCase())
+      project.name_project?.toLowerCase().includes(this.filterByName.toLowerCase())
     );
   }
 
   constructor(
     private projectService: ProjectService,
+    private userService: UserService,
     private router: Router,
     private notifierService: NotifierService
   ) {
@@ -39,11 +43,14 @@ export class ProjectListComponent {
 
   ngOnInit(): void {
     this.loadProjects();
+
   }
 
   loadProjects(): void {
     let index = Math.floor(Math.random() * colors.length);
-    this.subscription = this.projectService.getProjects().subscribe({
+
+
+    this.subscription = this.projectService.getProjects(this.userId).subscribe({
       next: (data) => {
         this.projects = data.map(project => ({
           ...project,
@@ -56,13 +63,23 @@ export class ProjectListComponent {
     });
   }
 
+
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
   }
 
   startProject(project: Project) {
     console.log(project);
-
+    this.projectService.updateProject(project, true).pipe(
+      tap((response) => {
+        this.subscribeToProjectsUpdate(response);
+        this.handleSuccess('Projeto atualizado com sucesso.');
+      }),
+      catchError(error => {
+        this.handleError('Erro ao atualizar projeto', error);
+        return of(null)
+      })
+    ).subscribe();
   }
 
   addProject(newProject: TemplateRef<any>) {
@@ -73,7 +90,7 @@ export class ProjectListComponent {
     );
   }
 
-  openProject(projectDetails: TemplateRef<any>, project: Project) {
+  openProject(project: Project) {
     const modalRef = this.modalService.open(ProjectDetailsComponent, { ariaLabelledBy: 'modal-basic-title', centered: true, size: 'xl' });
     modalRef.componentInstance.project = project;
 
@@ -83,6 +100,7 @@ export class ProjectListComponent {
   }
 
   private subscribeToProjectsUpdate(project: Project[]): void {
+
     let index = Math.floor(Math.random() * colors.length);
 
     this.projects.push({
@@ -92,7 +110,9 @@ export class ProjectListComponent {
   }
 
   saveProject(formData: any) {
-    this.projectService.addProject(formData).pipe(
+    console.log(this.user);
+
+    this.projectService.addProject(formData, this.userId).pipe(
       tap((response) => {
         this.subscribeToProjectsUpdate(response);
         this.handleSuccess('Projeto adicionado com sucesso.');
@@ -103,13 +123,6 @@ export class ProjectListComponent {
       })
     ).subscribe();
   }
-
-
-  createTask(project: Project) {
-    console.log(project.project_id);
-
-  }
-
 
 
   private handleSuccess(message: string): void {

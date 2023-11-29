@@ -20,9 +20,13 @@ export class ProjectService {
   ) { }
 
 
-  public getProjects(): Observable<Project[]> {
+  public getProjects(user_id?: any): Observable<Project[]> {
 
-    const url = `${this.apiUrl}/project`;
+    console.log(user_id);
+
+
+    const url = `${this.apiUrl}/project?user_id=${user_id}`;
+
 
     return this.http.get<Project[]>(url)
       .pipe(
@@ -34,10 +38,13 @@ export class ProjectService {
       );
   }
 
-  addProject(project: Project): Observable<any> {
+  addProject(project: Project, user_id: any): Observable<any> {
     const url = `${this.apiUrl}/project`;
     const headers = this.createHeaders();
-    const formattedProject: Project = this.formatProjectForBackend(project);
+    const formattedProject: Project = this.formatProjectForBackend(project, user_id);
+    console.log(user_id);
+
+    console.log(formattedProject);
 
     return this.http.post(url, formattedProject, { headers });
   }
@@ -46,13 +53,32 @@ export class ProjectService {
     return new HttpHeaders().set('Authorization', `${this.authToken}`);
   }
 
-  private formatProjectForBackend(project: Project): Project {
+  private formatProjectForBackend(project: Project, user_id: number): Project {
     return {
       name_project: project.name_project,
       description: project.description,
       date_create: new Date(),
       date_last_update: new Date(),
-      user_id: 14
+      user_id: user_id
     }
   }
+
+  public updateProject(project: Project, startProject: boolean): Observable<any> {
+    const url = `${this.apiUrl}/project`;
+    const headers = this.createHeaders();
+
+    console.log(project);
+
+    const formattedProject: Project = {
+      project_id: project.project_id,
+      name_project: project.name_project,
+      description: project.description,
+      date_create: project.date_create,
+      date_last_update: startProject ? new Date() : undefined,
+      user_id: project.user_id
+    };
+
+    return this.http.put(url, formattedProject, { headers });
+  }
+
 }

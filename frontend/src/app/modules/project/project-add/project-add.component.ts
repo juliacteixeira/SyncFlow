@@ -36,6 +36,7 @@ export class ProjectAddComponent implements OnInit {
       description: ['', Validators.required],
     });
   }
+
   onSubmit(): void {
     if (this.projectForm.valid) {
       this.onFormChange.emit(this.projectForm.value)

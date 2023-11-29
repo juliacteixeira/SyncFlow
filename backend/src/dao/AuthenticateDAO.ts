@@ -1,8 +1,8 @@
-import DataBase from "../config/DataBase";
-import { AuthenticateUser } from "../models/Authenticate";
-import jwt from "jsonwebtoken";
-import Auth from "../config/middlewares/Auth";
 import * as bcrypt from 'bcrypt';
+import jwt from "jsonwebtoken";
+import DataBase from "../config/DataBase";
+import Auth from "../config/middlewares/Auth";
+import { AuthenticateUser } from "../models/Authenticate";
 
 export class AuthenticateDAO {
 
@@ -16,16 +16,17 @@ export class AuthenticateDAO {
             throw new Error('Error interno server' + error);
         }
     }
-    
+
 
     static async comparePasswords(email: string, password: string) {
         const user: AuthenticateUser | undefined = await this.findByEmail(email);
-       
+
+
         if (user && (await this.comparePassword(password, user.password))) {
-            const token =  jwt.sign({ userId: user.user_id, username: user.email }, Auth.jwt.secret, {
+            const token = jwt.sign({ userId: user.user_id, username: user.email }, Auth.jwt.secret, {
                 expiresIn: Auth.jwt.expired,
             });
-            
+
             return token;
         }
         return undefined;

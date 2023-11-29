@@ -33,17 +33,18 @@
             <h4>
               {{ project.name_project }}
             </h4>
-            <ng-icon name='heroPlay' (click)='openProject(projectDetails, project)'></ng-icon>
+            <ng-icon name='heroPlay' (click)='openProject(project)'></ng-icon>
           </div>
           <div class="card-body">
             <p class='description'>{{ project.description }}</p>
             <p class='start-date'>Data de Criação: {{ project.date_create | date:'dd/MM/yyyy' }}</p>
             <p class='update-date'>Data de Última Atualização: {{ project.date_last_update | date:'dd/MM/yyyy' }}</p>
           </div>
-          <div class="card-footer">
-            <a class="btn btn-start-project" (click)="startProject(project)">Iniciar Projeto</a>
-            <a class="btn btn-start-project" (click)="createTask(project)">Criar tarefa</a>
-          </div>
+          <!-- <div class="card-footer">
+            <a *ngIf="project.date_last_update === project.date_create" class="btn btn-start-project"
+              (click)="startProject(project)">Iniciar
+              Projeto</a>
+          </div> -->
         </div>
       </div>
     </div>
@@ -61,16 +62,5 @@
     </div>
     <div class="modal-body">
       <app-project-add (onFormChange)="saveProject($event)"></app-project-add>
-    </div>
-  </ng-template>
-
-
-  <ng-template #projectDetails let-modal>
-    <div class="modal-header">
-      <h4 class="modal-title" id="modal-basic-title">Projeto Detalhes</h4>
-      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
-    </div>
-    <div class="modal-body">
-      <app-project-details></app-project-details>
     </div>
   </ng-template>
