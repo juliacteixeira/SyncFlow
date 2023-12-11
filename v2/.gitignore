@@ -1,0 +1,27 @@
+# Módulos Node.js
+node_modules/
+
+# Arquivos de configuração
+.env
+
+# Arquivos de compilação TypeScript
+dist/
+
+# Arquivos de log e dados temporários
+logs/
+*.log
+npm-debug.log*
+
+# Arquivos de compilação
+*.o
+*.obj
+*.suo
+*.dll
+*.exe
+
+# Arquivos gerados pelo sistema operacional
+.DS_Store
+Thumbs.db
+
+# Para projetos com Visual Studio Code
+.vscode/
