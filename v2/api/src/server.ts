@@ -1,8 +1,9 @@
 // src/server.ts
 import dotenv from 'dotenv';
-import express from 'express';
+import express, { Application } from 'express';
 import mongoose from 'mongoose';
-import { databaseConfig } from '../config/database.config';
+import { databaseConfig } from './helpers/database.config';
+import { authRoutes } from './routes/auth-routes';
 
 /**
  * Classe responsável por iniciar o servidor.
@@ -11,7 +12,7 @@ import { databaseConfig } from '../config/database.config';
  */
 
 class Server {
-    private app: express.Application;
+    private app: Application;
     private PORT: number;
 
     // Método `constructor()`
@@ -83,10 +84,11 @@ class Server {
      */
 
     private configureRoutes() {
-        // Adicione suas rotas aqui
+        // Rota de boas-vindas
         this.app.get('/', (req, res) => {
             res.send('Hello, SyncFlow!');
         });
+        authRoutes(this.app);
     }
 
 
