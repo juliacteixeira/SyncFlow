@@ -1,0 +1,49 @@
+.task-item {
+  border-bottom: 1px solid #e5eaef !important;
+  padding: 12px 8px;
+  display: flex;
+  align-items: center;
+
+  .checkbox {
+    display: inline-block;
+    position: relative;
+    flex: 0 0 18px;
+    box-sizing: content-box;
+    width: 18px;
+    height: 18px;
+    line-height: 0;
+    white-space: nowrap;
+    cursor: pointer;
+    vertical-align: bottom;
+  }
+
+  .label {
+    font-size: 14px;
+    margin: 0;
+    padding: 0;
+    order: 0;
+    font-weight: 500 !important;
+  }
+
+  .start-date {
+    margin: 0;
+    font-size: 12px;
+    line-height: 21.35px;
+    margin-bottom: 0;
+  }
+
+  .text {
+    margin-left: 4px;
+    margin-right: auto;
+    padding-left: 4px;
+    padding-right: 0;
+  }
+
+  .action-buttons {
+    display: flex;
+    font-size: 18px;
+    width: 20px;
+    height: 18px;
+    justify-content: space-between;
+  }
+}

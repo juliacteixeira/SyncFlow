@@ -1,0 +1,49 @@
+<div class='row'>
+  <div class='col-md-12'>
+    <div class="card mb-0 cardWithShadow">
+      <div class="card-body">
+        <form [formGroup]="taskForm" (ngSubmit)="onSubmit()">
+          <div class='row d-flex'>
+            <div class='col-md-8'>
+              <div class="input-control">
+                <label>
+                  <input type="text" placeholder="" formControlName="name_task" />
+                  <p>Add task</p>
+                </label>
+                <div *ngIf="taskForm?.get('name_task')?.hasError('required') && taskForm.get('name_task')?.touched"
+                  class="text-danger">
+                  Nome da Tarefa é obrigatório.
+                </div>
+              </div>
+            </div>
+            <div class='col-md-4 d-flex justify-content-end align-content-end align-items-end'>
+              <button class="btn btn-primary" type='submit'>Add task</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class='row'>
+  <div class='col-md-12'>
+
+    <div class="task-list mt-4">
+      <div *ngFor="let task of tasks" class="task-item">
+        <input type="checkbox" [checked]="task.status === 'concluído'" (change)="toggleTaskStatus(task)"
+          class='checkbox' />
+        <div class='text'>
+          <p class='label'>{{ task.name_task }}</p>
+
+          <p class='start-date'>Data de Criação: {{ task.data_create | date:'dd/MM/yyyy' }} <span
+              *ngIf="task.status === 'concluído'">- Data de conclusão: {{ task.date_conclusion | date:'dd/MM/yyyy'
+              }}</span></p>
+        </div>
+        <div class="action-buttons">
+          <ng-icon (click)="deleteTask(task)" name="heroTrash" class='ml-4'></ng-icon>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
