@@ -9,7 +9,7 @@ export function generateSecretKey(): string {
     const randomBytes = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
 
     // Criação de um hash SHA-256 usando os bytes aleatórios
-    const secretKey = createHash('sha256').update(randomBytes).digest('hex');
+    const secretKey = createHash('sha256')?.update(randomBytes).digest('hex');
 
     return secretKey;
 }
