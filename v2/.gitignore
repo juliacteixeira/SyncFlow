@@ -1,6 +1,6 @@
 # Módulos Node.js
 node_modules/
-
+package-lock.json
 # Arquivos de configuração
 .env
 
@@ -10,6 +10,7 @@ dist/
 # Arquivos de log e dados temporários
 logs/
 *.log
+coverage/
 npm-debug.log*
 
 # Arquivos de compilação
