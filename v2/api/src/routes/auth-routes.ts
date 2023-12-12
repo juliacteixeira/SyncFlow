@@ -1,6 +1,7 @@
 // routes.ts
 import { Application } from 'express';
-import { UserModel } from '../models/User';
+import { authenticateUser } from '../middleware/authentication';
+import { IUser, UserModel } from '../models/User';
 import { AuthService } from '../services/AuthService';
 
 
@@ -56,5 +57,11 @@ export function authRoutes(app: Application) {
         } catch (error) {
             res.status(500).json({ error: 'Erro ao verificar token.' });
         }
+    });
+
+    app.post('/protectedRoute', authenticateUser, async (req, res) => {
+        // Você pode acessar as informações do usuário através de req.user
+        const reqWithUser = req as unknown as Request & { user?: IUser };
+        res.json({ user: reqWithUser.user });
     });
 }

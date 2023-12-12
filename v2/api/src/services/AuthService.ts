@@ -47,6 +47,7 @@ export class AuthService {
      */
     static generateAuthToken(user: IUser): string {
         const secretKey = process.env.JWT_SECRET || generateSecretKey(); // Troque para algo mais seguro em produção
+
         return jwt.sign({ userId: user._id }, secretKey, { expiresIn: '1h' });
     }
 
@@ -60,9 +61,17 @@ export class AuthService {
 
         try {
             const decodedToken: any = jwt.verify(token, secretKey);
-            return decodedToken.userId;
+
+            if (decodedToken) {
+                return decodedToken.userId;
+            } else {
+                return null;
+            }
         } catch (error) {
+            console.log(error);
+
             return null;
         }
+
     }
 }
